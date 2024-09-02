@@ -6,8 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ColorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ColorRepository::class)]
-#[ApiResource]
+//#[ORM\Entity(repositoryClass: ColorRepository::class)]
+//#[ApiResource]
 class Color
 {
     #[ORM\Id]

@@ -6,8 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BrandRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BrandRepository::class)]
-#[ApiResource]
+//#[ORM\Entity(repositoryClass: BrandRepository::class)]
+//#[ApiResource]
 class Brand
 {
     #[ORM\Id]
