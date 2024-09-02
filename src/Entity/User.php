@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
-    security: "object === user"
+    security: "object === user "
 )]
 #[UniqueEntity('email')]
 #[UniqueEntity('username')]
@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank()]
-    #[Groups(['user:read', 'user:write', 'collectable:read'])]
+    #[Groups(['user:read', 'user:write', 'collectable:read','collection:write'])]
     private ?string $username = null;
 
     #[ORM\Column(type: 'string')]
@@ -76,7 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, CollectionObject>
      */
     #[ORM\OneToMany(targetEntity: CollectionObject::class, mappedBy: 'user', orphanRemoval: true)]
-//    #[Groups(['user:read'])]
+    #[Groups(['user:read'])]
     private Collection $collection;
 
     #[ORM\Column(type: 'json')]

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\CollectableRepository;
@@ -43,7 +44,7 @@ class Collectable
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['collectable:read', 'collectable:write','user:read'])]
+    #[Groups(['collectable:read', 'collectable:write', 'user:read', 'collection:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'collectablesCreated')]
@@ -56,7 +57,7 @@ class Collectable
     private ?bool $public = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['collectable:read', 'collectable:write'])]
+    #[Groups(['collectable:read', 'collectable:write', 'collection:read'])]
     private ?string $description = null;
 
     public function getId(): ?int

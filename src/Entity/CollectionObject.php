@@ -3,14 +3,42 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CollectionObjectRepository;
+use App\State\CollectablePersister;
+use App\State\CollectionPersister;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CollectionObjectRepository::class)]
-#[ApiResource]
-class CollectionObject
+#[ApiResource(
+    uriTemplate: '/collections{/id}',
+    operations: [
+        new GetCollection(
+            uriTemplate: '/collections',
+        ),
+        new Get(),
+        new Post(
+            processor: CollectionPersister::class
+        ),
+        new Patch(
+            security: "object.getUser() == user",
+        ),
+        new Delete(
+            security: "object.getUser() == user",
+        ),
+    ],
+    normalizationContext: ['groups' => ['collection:read']],
+    denormalizationContext: ['groups' => ['collection:write']],
+    security: "is_granted('ROLE_USER')",
+
+)] class CollectionObject
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,16 +46,19 @@ class CollectionObject
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['collection:read', 'collection:write', 'user:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'collection')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['collection:write'])]
     private ?User $user = null;
 
     /**
      * @var Collection<int, Collectable>
      */
     #[ORM\ManyToMany(targetEntity: Collectable::class)]
+    #[Groups(['collection:read', 'collection:write'])]
     private Collection $collectable;
 
     public function __construct()
