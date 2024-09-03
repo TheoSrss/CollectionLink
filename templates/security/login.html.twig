@@ -1,0 +1,20 @@
+{% extends '@EasyAdmin/page/login.html.twig' %}
+
+{% block page_title %}Administration CollectionLink{% endblock %}
+
+{% block wrapper_wrapper %}
+    {% set page_title = 'Connexion' %}
+    {% set _username_label = 'Username' %}
+    {% set _password_label = 'Password' %}
+    {% set _sign_in_label = 'Log in' %}
+    {{ parent() }}
+    <script type="text/javascript">
+        const loginForm = document.querySelector('form');
+        loginForm.action = "{{ path('admin_login') }}";
+        //button type submit text Is Log in
+        const submitButton = loginForm.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.textContent = "{{ _sign_in_label }}";
+        }
+    </script>
+{% endblock %}

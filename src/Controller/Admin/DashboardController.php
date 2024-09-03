@@ -19,10 +19,8 @@ class DashboardController extends AbstractDashboardController
     #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
-
          $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
          return $this->redirect($adminUrlGenerator->setController(CollectableCrudController::class)->generateUrl());
-
     }
 
     public function configureDashboard(): Dashboard
