@@ -15,3 +15,10 @@ services:
     resource: '../src/State/*'
     bind:
       $processor: '@api_platform.doctrine.orm.state.persist_processor'
+  App\Service\EntityProcessorService:
+    arguments:
+      $processors: !tagged_iterator api_platform.state_processor
+      $processorMapping:
+        App\Entity\User: 'App\State\UserPersister'
+        App\Entity\Collectable: 'App\State\CollectablePersister'
+        App\Entity\Collection: 'App\State\CollectionPersister'

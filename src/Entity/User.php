@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(),
         new Post(
             security: "is_granted('PUBLIC_ACCESS')",
+            validationContext: ['groups' => ['Default','user:create']],
             processor: UserPersister::class
         ),
         new Patch(
@@ -43,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     const ROLE_USER = 'ROLE_USER';
     const ROLE_ADMIN = 'ROLE_ADMIN';
 
-    private static array $allRoles = [self::ROLE_USER, self::ROLE_ADMIN];
+    public static array $allRoles = [self::ROLE_USER, self::ROLE_ADMIN];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -65,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(groups: ['user:create'])]
     #[SerializedName('password')]
     #[Assert\Length(min: 8)]
     #[Assert\Regex("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/")]
