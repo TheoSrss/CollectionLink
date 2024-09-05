@@ -21,4 +21,4 @@ services:
       $processorMapping:
         App\Entity\User: 'App\State\UserPersister'
         App\Entity\Collectable: 'App\State\CollectablePersister'
-        App\Entity\Collection: 'App\State\CollectionPersister'
+        App\Entity\CollectionObject: 'App\State\CollectionPersister'

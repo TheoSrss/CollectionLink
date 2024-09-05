@@ -20,10 +20,14 @@ final readonly class CollectablePersister implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        if ($data instanceof Collectable) {
-            $user = $this->security->getUser();
-            if ($user instanceof User) {
-                $data->setCreator($user);
+        if (
+            !in_array('byAdmin', $uriVariables) ||
+            !$uriVariables['byAdmin']) {
+            if ($data instanceof Collectable) {
+                $user = $this->security->getUser();
+                if ($user instanceof User) {
+                    $data->setCreator($user);
+                }
             }
         }
         return $this->processor->process($data, $operation, $uriVariables, $context);

@@ -8,12 +8,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UserCrudController extends AbstractCrudController
 {
     public function __construct(
-        private readonly EntityProcessorService $customPersistService)
+        private readonly EntityProcessorService $customPersistService,
+        )
     {
     }
 
@@ -25,8 +27,8 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
         return [
+            FormField::addTab('User Info'),
             TextField::new('email'),
             TextField::new('username'),
             TextField::new('plainPassword')
@@ -36,16 +38,17 @@ class UserCrudController extends AbstractCrudController
                 ->setChoices(array_combine(User::$allRoles, User::$allRoles))
                 ->allowMultipleChoices()
                 ->renderAsBadges(),
+
         ];
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        $this->customPersistService->persist($entityInstance,'create',);
+        $this->customPersistService->persist($entityInstance, 'create',);
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        $this->customPersistService->persist($entityInstance,'update');
+        $this->customPersistService->persist($entityInstance, 'update');
     }
 }

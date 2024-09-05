@@ -34,7 +34,7 @@ final readonly class UserPersister implements ProcessorInterface
             $data->eraseCredentials();
         }
         if (
-            !in_array( 'byAdmin',$uriVariables) ||
+            !in_array('byAdmin', $uriVariables) ||
             !$uriVariables['byAdmin']) {
             $data->setRoles([]);
         }

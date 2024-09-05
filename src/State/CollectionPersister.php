@@ -21,10 +21,14 @@ final readonly class CollectionPersister implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        if ($data instanceof CollectionObject) {
-            $user = $this->security->getUser();
-            if ($user instanceof User) {
-                $data->setUser($user);
+        if (
+            !in_array('byAdmin', $uriVariables) ||
+            !$uriVariables['byAdmin']) {
+            if ($data instanceof CollectionObject) {
+                $user = $this->security->getUser();
+                if ($user instanceof User) {
+                    $data->setUser($user);
+                }
             }
         }
         return $this->processor->process($data, $operation, $uriVariables, $context);
