@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\UserController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -30,6 +31,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Patch(
             processor: UserPersister::class
+        ),
+        new Get(
+            uriTemplate: '/profile',
+            controller: UserController::class,
+            security: "is_granted('ROLE_USER')",
+            read: false,
+            name: 'profile'
         ),
     ],
     normalizationContext: ['groups' => ['user:read']],
