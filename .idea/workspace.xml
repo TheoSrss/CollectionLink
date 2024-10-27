@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e153a31c-5783-4dbe-8863-c1a2fcb87b5a" name="Changes" comment="add directory for SF API" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/opt/homebrew/Cellar/php/8.3.9/bin/php" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2lQcvowqCIQzSTjsc56FaN12ePY" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/theo/Desktop/Code/collectionLink",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/collectionLink_api" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.23339.16" />
+        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.23339.16" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e153a31c-5783-4dbe-8863-c1a2fcb87b5a" name="Changes" comment="first commit" />
+      <created>1725115973609</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1725115973609</updated>
+      <workItem from="1725115974574" duration="24306000" />
+      <workItem from="1725294302516" duration="35544000" />
+      <workItem from="1725551614196" duration="28972000" />
+      <workItem from="1726398545148" duration="579000" />
+      <workItem from="1726593797499" duration="99000" />
+      <workItem from="1726594928216" duration="6195000" />
+      <workItem from="1727527339833" duration="7626000" />
+      <workItem from="1729089480733" duration="255000" />
+      <workItem from="1729089776214" duration="18658000" />
+    </task>
+    <task id="LOCAL-00001" summary="User entity | clean API, add password logic">
+      <option name="closed" value="true" />
+      <created>1725279098728</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1725279098728</updated>
+    </task>
+    <task id="LOCAL-00002" summary="User entity | clean API, add password logic">
+      <option name="closed" value="true" />
+      <created>1725279105242</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725279105242</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Commented entities who will wait">
+      <option name="closed" value="true" />
+      <created>1725279185531</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725279185531</updated>
+    </task>
+    <task id="LOCAL-00004" summary="API collectable | API rules">
+      <option name="closed" value="true" />
+      <created>1725293313526</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725293313526</updated>
+    </task>
+    <task id="LOCAL-00005" summary="API collection | API rules">
+      <option name="closed" value="true" />
+      <created>1725297649377</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725297649377</updated>
+    </task>
+    <task id="LOCAL-00006" summary="EasyAdmin | init">
+      <option name="closed" value="true" />
+      <created>1725355247689</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1725355247689</updated>
+    </task>
+    <task id="LOCAL-00007" summary="EasyAdmin | add security for admin access only">
+      <option name="closed" value="true" />
+      <created>1725357378182</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1725357378182</updated>
+    </task>
+    <task id="LOCAL-00008" summary="EasyAdmin | users dashboard">
+      <option name="closed" value="true" />
+      <created>1725455641727</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1725455641727</updated>
+    </task>
+    <task id="LOCAL-00009" summary="EasyAdmin | collectable,collecion dashboard">
+      <option name="closed" value="true" />
+      <created>1725526317672</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1725526317672</updated>
+    </task>
+    <task id="LOCAL-00010" summary="CORS | config for cors return API">
+      <option name="closed" value="true" />
+      <created>1725552848043</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1725552848043</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add /profile URI">
+      <option name="closed" value="true" />
+      <created>1729093673707</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1729093673707</updated>
+    </task>
+    <task id="LOCAL-00012" summary="add directory for SF API">
+      <option name="closed" value="true" />
+      <created>1730052921115</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1730052921115</updated>
+    </task>
+    <task id="LOCAL-00013" summary="add directory for SF API">
+      <option name="closed" value="true" />
+      <created>1730052949980</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1730052949980</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="User entity | clean API, add password logic" />
+    <MESSAGE value="Commented entities who will wait" />
+    <MESSAGE value="API collectable | API rules" />
+    <MESSAGE value="API collection | API rules" />
+    <MESSAGE value="EasyAdmin | init" />
+    <MESSAGE value="EasyAdmin | add security for admin access only" />
+    <MESSAGE value="EasyAdmin | users dashboard" />
+    <MESSAGE value="EasyAdmin | collectable,collecion dashboard" />
+    <MESSAGE value="CORS | config for cors return API" />
+    <MESSAGE value="add /profile URI" />
+    <MESSAGE value="add directory for SF API" />
+    <option name="LAST_COMMIT_MESSAGE" value="add directory for SF API" />
+  </component>
+</project>
