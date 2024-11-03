@@ -26,11 +26,10 @@ const Login = () => {
 
     const onSubmit = async (formData) => {
         setLoginError(null);
-        try {
+            try {
             await loginUser(formData.username, formData.password);
         } catch (error) {
-            console.log(error)
-            setLoginError('Invalid credentials or an error occurred during login');
+            setLoginError('Identifiants invalides ou une erreur s\'est produite lors de la connexion');
         }
     };
     if(user){
