@@ -15,7 +15,7 @@ api_platform:
     extra_properties:
       standard_put: true
       rfc_7807_compliant_errors: true
-  keep_legacy_inflector: false
+  inflector: api_platform.metadata.inflector
   use_symfony_listeners: true
   swagger:
     api_keys:
