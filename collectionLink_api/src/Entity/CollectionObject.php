@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -9,7 +11,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\CollectionObjectRepository;
-use App\State\CollectablePersister;
 use App\State\CollectionPersister;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -38,7 +39,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
     denormalizationContext: ['groups' => ['collection:write']],
     security: "is_granted('ROLE_USER')",
 
-)] class CollectionObject
+)]
+#[ApiFilter(SearchFilter::class, properties:['user' => 'exact'])]
+ class CollectionObject
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -51,7 +54,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
     #[ORM\ManyToOne(inversedBy: 'collection')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['collection:write'])]
+    #[Groups(['collection:write', 'collection:read'])]
     private ?User $user = null;
 
     /**

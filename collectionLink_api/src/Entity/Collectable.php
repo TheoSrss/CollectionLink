@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -20,6 +22,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 //#[ORM\DiscriminatorMap(["sneaker" => Sneaker::Class])]
 #[ApiResource(
     operations: [
+        new GetCollection(
+            security: "is_granted('ROLE_USER')",
+            securityPostDenormalize: "object.creator == user"
+        ),
         new Get(),
         new Post(
             processor: CollectablePersister::class
@@ -35,7 +41,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     denormalizationContext: ['groups' => ['collectable:write']],
     security: "is_granted('ROLE_USER')"
 )]
-//abstract
+#[ApiFilter(SearchFilter::class, properties:['creator' => 'exact'])]
 class Collectable
 {
     #[ORM\Id]
