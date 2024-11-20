@@ -21,7 +21,6 @@ const Login = () => {
         return errors;
     };
 
-    // const UserForm = () => {
     const {values, errors, handleChange, handleSubmit} = useForm(initialState, validate);
 
     const onSubmit = async (formData) => {

@@ -1,26 +1,123 @@
-import React, { createContext, useState, useContext } from 'react';
-import { login, logout } from '../services/auth';
+import React, {createContext, useCallback, useContext, useEffect, useReducer} from 'react';
+import {isAuthenticated, login as authLogin, logout as authLogout} from '../services/auth';
+import api from "../services/api";
 
 const AuthContext = createContext(null);
 
+// Reducer pour gérer les états d'authentification
+const authReducer = (state, action) => {
+    switch (action.type) {
+        case 'AUTH_CHECK_START':
+            return {...state, loading: true};
+        case 'AUTH_CHECK_COMPLETE':
+            return {
+                loading: false,
+                authenticated: action.payload.authenticated,
+                user: action.payload.user
+            };
+        case 'SET_USER':
+            return {
+                ...state,
+                loading: false,
+                authenticated: true,
+                user: action.payload
+            };
+        case 'LOGOUT':
+            return {
+                loading: false,
+                authenticated: false,
+                user: null
+            };
+        default:
+            return state;
+    }
+};
+
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [state, dispatch] = useReducer(authReducer, {
+        loading: true,
+        authenticated: false,
+        user: null
+    });
+
+    // Vérification de l'authentification
+    const checkAuth = useCallback(async () => {
+        dispatch({type: 'AUTH_CHECK_START'});
+        const authenticated = isAuthenticated();
+
+        if (authenticated && !state.user) {
+            try {
+                const profileResponse = await api.get('profile').json();
+                dispatch({
+                    type: 'AUTH_CHECK_COMPLETE',
+                    payload: {
+                        authenticated: true,
+                        user: profileResponse
+                    }
+                });
+            } catch (error) {
+                dispatch({
+                    type: 'AUTH_CHECK_COMPLETE',
+                    payload: {
+                        authenticated: false,
+                        user: null
+                    }
+                });
+                authLogout();
+            }
+        } else {
+            dispatch({
+                type: 'AUTH_CHECK_COMPLETE',
+                payload: {
+                    authenticated,
+                    user: state.user
+                }
+            });
+        }
+    }, [state.user]);
+
+    // Vérification périodique
+    useEffect(() => {
+        checkAuth();
+        const interval = setInterval(checkAuth, 5000);
+        return () => clearInterval(interval);
+    }, [checkAuth]);
 
     const loginUser = async (username, password) => {
-        const response = await login(username, password);
-        setUser(response.token);
+        const response = await authLogin(username, password);
+        if (response.token) {
+            const profileResponse = await api.get('profile').json();
+            dispatch({
+                type: 'SET_USER',
+                payload: {...profileResponse, token: response.token}
+            });
+        }
     };
 
     const logoutUser = () => {
-        logout();
-        setUser(null);
+        authLogout();
+        dispatch({type: 'LOGOUT'});
     };
 
     return (
-        <AuthContext.Provider value={{ user, loginUser, logoutUser }}>
+        <AuthContext.Provider
+            value={{
+                user: state.user,
+                loading: state.loading,
+                authenticated: state.authenticated,
+                loginUser,
+                logoutUser
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
