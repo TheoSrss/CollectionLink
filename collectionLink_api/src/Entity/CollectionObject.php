@@ -14,18 +14,20 @@ use App\Repository\CollectionObjectRepository;
 use App\State\CollectionPersister;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CollectionObjectRepository::class)]
 #[ApiResource(
-    uriTemplate: '/collections{/id}',
+    uriTemplate: '/collections/{id}',
     operations: [
         new GetCollection(
             uriTemplate: '/collections',
         ),
         new Get(),
         new Post(
+            uriTemplate: '/collections',
             processor: CollectionPersister::class
         ),
         new Patch(
@@ -63,6 +65,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
     #[ORM\ManyToMany(targetEntity: Collectable::class)]
     #[Groups(['collection:read', 'collection:write'])]
     private Collection $collectable;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['collection:write', 'collection:read'])]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -118,6 +124,18 @@ use Symfony\Component\Serializer\Attribute\Groups;
     public function removeCollectable(Collectable $collectable): static
     {
         $this->collectable->removeElement($collectable);
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
