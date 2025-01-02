@@ -12,7 +12,6 @@ const Profile = () => {
 
     const validate = (values) => {
         const errors = {};
-        // Ajoutez ici votre logique de validation
         return errors;
     };
 
@@ -28,26 +27,19 @@ const Profile = () => {
                 setValues(data);
                 setLoading(false);
             } catch (error) {
-                console.log('errreur')
-                // setLoading(false);
+                setLoading(false);
             }
-            console.log(user)
         }
 
         fetchUserData();
     }, [setValues]);
 
     const onSubmit = async (formData) => {
-        // setValues({email: 'erererw', username: 'dfsfdssfd
-        // try {
-        const res = api.patch(`users/${user.id}`, {json: {"email": formData.email,"username": formData.username}});
+        try {
+            const res = api.patch(`users/${user.id}`, {json: {"email": formData.email, "username": formData.username}});
 
-        console.log(res)
-        // Logique pour soumettre le formulaire
-        console.log(formData);
-        // } catch (error) {
-        //     console.error('Erreur lors de la soumission du formulaire:', error);
-        // }
+        } catch (error) {
+        }
     };
 
     if (loading) return <Loading></Loading>;

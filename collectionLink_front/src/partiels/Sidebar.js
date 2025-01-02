@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {NavLink, useLocation} from "react-router-dom";
-import {CircleUser, LibraryBig} from 'lucide-react';
+import {CircleUser, LibraryBig,ListChecks} from 'lucide-react';
 import Logo from '../assets/svg/logo.svg'
 function Sidebar({
                      sidebarOpen, setSidebarOpen, variant = 'default',
@@ -114,6 +114,15 @@ function Sidebar({
                                         <LibraryBig/>
                                         <span
                                             className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mes collections</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className={`pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${pathname.includes("inbox") && "from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]"}`}>
+                                <NavLink to="/items">
+                                    <div className="flex items-center">
+                                        <ListChecks/>
+                                        <span
+                                            className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mes items</span>
                                     </div>
                                 </NavLink>
                             </li>
