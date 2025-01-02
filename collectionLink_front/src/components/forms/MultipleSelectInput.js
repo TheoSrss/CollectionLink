@@ -4,13 +4,12 @@ const MultipleSelectInput = ({label, name, options, itemTitle, selectedValues, o
     const [isOpen, setIsOpen] = useState(false);
     const toggleDropdown = () => setIsOpen(!isOpen);
     const handleSelect = (option) => {
-        if (selectedValues.includes(option)) {
-            onChange(selectedValues.filter((value) => value !== option));
+        if (selectedValues.some(selected => selected['@id'] === option['@id'])) {
+            onChange(selectedValues.filter(selected => selected['@id'] !== option['@id']));
         } else {
             onChange([...selectedValues, option]);
         }
     };
-
     return (<div className="my-6">
         {label && (<label htmlFor={name} className="mb-2.5 block font-medium text-black dark:text-gray-100">
             {label}
