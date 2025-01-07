@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 const Modal = ({setModalOpen, children}) => {
     const closeModal = (collection = null) => {
@@ -9,6 +9,15 @@ const Modal = ({setModalOpen, children}) => {
             setModalOpen(false);
         }
     };
+    useEffect(() => {
+        const close = (e) => {
+            if(e.keyCode === 27){
+                setModalOpen(false);
+            }
+        }
+        window.addEventListener('keydown', close)
+        return () => window.removeEventListener('keydown', close)
+    },[])
     return (<div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50"
                  onClick={handleBackgroundClick}>
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2 p-6 relative">
