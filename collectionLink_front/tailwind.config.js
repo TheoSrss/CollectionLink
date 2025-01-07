@@ -1,10 +1,13 @@
 import plugin from "tailwindcss/plugin";
 import forms from '@tailwindcss/forms';
 
+const flowbite = require("flowbite-react/tailwind");
+
 export default {
   content: [
     './index.html',
     './src/**/*.{js,jsx,ts,tsx}',
+      flowbite.content(),
   ],
   darkMode: 'class',
   theme: {
@@ -129,11 +132,11 @@ export default {
   },
   plugins: [
     forms,
-    // add custom variant for expanding sidebar
     plugin(({ addVariant, e }) => {
       addVariant('sidebar-expanded', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => `.sidebar-expanded .${e(`sidebar-expanded${separator}${className}`)}`);
       });
     }),
+    flowbite.plugin(),
   ],
 };
