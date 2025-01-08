@@ -69,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank()]
+    #[Assert\Length(min: 3, max: 30)]
     #[Groups(['user:read', 'user:write', 'collectable:read', 'collection:write','collection:read'])]
     private ?string $username = null;
 

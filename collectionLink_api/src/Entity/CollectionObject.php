@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CollectionObjectRepository::class)]
 #[ApiResource(
@@ -50,7 +51,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 3, max: 30)]
     #[Groups(['collection:read', 'collection:write', 'user:read'])]
     private ?string $name = null;
 
@@ -63,6 +66,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
      * @var Collection<int, Collectable>
      */
     #[ORM\ManyToMany(targetEntity: Collectable::class)]
+    #[Assert\Valid()]
+    #[Assert\Count(
+        min: 1,
+    )]
     #[Groups(['collection:read', 'collection:write'])]
     private Collection $collectable;
 
