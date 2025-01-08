@@ -22,13 +22,14 @@ const Collections = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [collectionToDelete, setCollectionToDelete] = useState(null);
+    const [formError, setFormError] = useState(false);
 
     // Modal logic
-    const validate = (values) => {
-        const errors = {};
-        return errors;
-    };
-    const {handleChange, handleSubmit, values, updateValues} = useForm(collectionEdited, validate);
+    // const validate = (values) => {
+    //     const errors = {};
+    //     return errors;
+    // };
+    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(collectionEdited);
     // Modal logic
 
     useEffect(() => {
@@ -70,7 +71,7 @@ const Collections = () => {
                 name: '', description: '', collectable: []
             }
         }
-        updateValues(collection);
+        setValues(collection);
         setSelectedItems(collection.collectable);
         setFormOpened(true);
     };
@@ -84,22 +85,30 @@ const Collections = () => {
         setSelectedItems(newSelectedItems);
     };
     const onSubmit = async (formData) => {
-        // try {
-        let endpoint = formData['@id'] ?? 'collections';
-        let apiMethod = formData['@id'] ? api.patch : api.post;
-        console.log(formData, endpoint);
-        let payload = {
-            name: formData.name,
-            description: formData.description,
-            collectable: selectedItems.map((item) => item['@id']),
-        };
-        const res = await apiMethod(endpoint.replace('/api/', ''), {json: payload});
-        if (res.ok) {
-            setFormOpened(false);
-            await fetchCollectionsData();
+        try {
+            let endpoint = formData['@id'] ?? 'collections';
+            let apiMethod = formData['@id'] ? api.patch : api.post;
+            console.log(formData, endpoint);
+            let payload = {
+                name: formData.name,
+                description: formData.description,
+                collectable: selectedItems.map((item) => item['@id']),
+            };
+            const res = await apiMethod(endpoint.replace('/api/', ''), {json: payload});
+            if (res.ok) {
+                setFormOpened(false);
+                await fetchCollectionsData();
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 422) {
+                const data = await error.response.json();
+                if (data.violations) {
+                    handleApiErrors(data.violations);
+                }
+            } else {
+                setFormError(true);
+            }
         }
-        // } catch (error) {
-        // }
     };
 
 
@@ -124,7 +133,7 @@ const Collections = () => {
 
     return (<div className="h-screen flex items-center justify-center">
         {formOpened && (<Modal setModalOpen={setFormOpened}>
-            <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+            <FormWrapper onSubmit={handleSubmit(onSubmit)} error={formError}>
                 <TextInput
                     name="name"
                     label="Titre"
@@ -132,6 +141,7 @@ const Collections = () => {
                     placeholder="Collection de vinyle"
                     onChange={handleChange}
                     logo={titleLogo}
+                    error={errors.name}
                 />
                 <TextInput
                     name="description"
@@ -139,6 +149,7 @@ const Collections = () => {
                     value={values.description}
                     onChange={handleChange}
                     logo={descriptionLogo}
+                    error={errors.description}
                 />
                 <MultipleSelectInput
                     label="Choisissez vos items"
@@ -147,6 +158,7 @@ const Collections = () => {
                     itemTitle="name"
                     selectedValues={selectedItems}
                     onChange={handleSelectionChange}
+                    error={errors.collectable}
                 />
                 <button type="submit"
                         className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">

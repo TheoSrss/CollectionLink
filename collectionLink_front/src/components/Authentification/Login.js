@@ -14,14 +14,14 @@ const Login = () => {
 
     const initialState = {username: '', password: ''};
 
-    const validate = (values) => {
-        const errors = {};
-        if (!values.password) errors.password = 'Password is required';
-        if (!values.username) errors.username = 'Username is required';
-        return errors;
-    };
+    // const validate = (values) => {
+    //     const errors = {};
+    //     if (!values.password) errors.password = 'Password is required';
+    //     if (!values.username) errors.username = 'Username is required';
+    //     return errors;
+    // };
 
-    const {values, errors, handleChange, handleSubmit} = useForm(initialState, validate);
+    const {values, errors, handleChange, handleSubmit} = useForm(initialState);
 
     const onSubmit = async (formData) => {
         setLoginError(null);
