@@ -18,6 +18,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Trait\TimestampableTrait;
 
 #[ORM\Entity(repositoryClass: CollectionObjectRepository::class)]
 #[ApiResource(
@@ -44,8 +45,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 )]
 #[ApiFilter(SearchFilter::class, properties:['user' => 'exact'])]
+#[ORM\HasLifecycleCallbacks]
  class CollectionObject
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

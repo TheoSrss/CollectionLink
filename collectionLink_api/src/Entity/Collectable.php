@@ -15,6 +15,8 @@ use App\State\CollectablePersister;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use App\Entity\Trait\TimestampableTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CollectableRepository::class)]
 //#[ORM\InheritanceType("JOINED")]
@@ -42,14 +44,19 @@ use Symfony\Component\Serializer\Attribute\Groups;
     security: "is_granted('ROLE_USER')"
 )]
 #[ApiFilter(SearchFilter::class, properties:['creator' => 'exact'])]
+#[ORM\HasLifecycleCallbacks]
 class Collectable
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 3, max: 30)]
     #[Groups(['collectable:read', 'collectable:write', 'user:read', 'collection:read'])]
     private ?string $name = null;
 
