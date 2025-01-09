@@ -41,7 +41,6 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/login" element={<Login/>}/>
-
                     <Route path="/" element={
                         <PrivateRoute>
                             <PrivateLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
@@ -53,7 +52,6 @@ function App() {
                         <Route path="collections" element={<Collections/>}/>
                         <Route path="items" element={<Items/>}/>
                     </Route>
-
                     <Route path="*" element={<Navigate to="/" replace/>}/>
                 </Routes>
             </Router>

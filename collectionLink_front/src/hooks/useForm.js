@@ -9,8 +9,8 @@ const useForm = (initialState) => {
         setValues(newValues);
     };
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setValues({...values, [name]: value});
+        const {name, value, type, checked} = e.target;
+        setValues({...values, [name]: type === 'checkbox' ? checked : value,});
     };
 
     const handleSubmit = (onSubmit) => (e) => {
@@ -28,7 +28,7 @@ const useForm = (initialState) => {
         setErrors(newErrors);
     };
 
-    return {values, errors, handleChange, handleSubmit, setValues, updateValues,handleApiErrors};
+    return {values, errors, handleChange, handleSubmit, setValues, updateValues, handleApiErrors};
 };
 
 export default useForm;

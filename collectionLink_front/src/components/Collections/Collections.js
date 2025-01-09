@@ -26,20 +26,14 @@ const Collections = () => {
     const [collectionToDelete, setCollectionToDelete] = useState(null);
     const [formError, setFormError] = useState(false);
 
-    // Modal logic
-    // const validate = (values) => {
-    //     const errors = {};
-    //     return errors;
-    // };
     const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(collectionEdited);
     // Modal logic
-
     useEffect(() => {
         if (user) {
             fetchCollectionsData();
             fetchItemsData();
         }
-    }, [user,]);
+    }, [user]);
 
     const fetchCollectionsData = async () => {
         try {
@@ -58,7 +52,6 @@ const Collections = () => {
             const data = await response.json();
             setItems(data["member"]);
         } catch (error) {
-            console.error('Error:', error);
         } finally {
 
         }
@@ -92,7 +85,6 @@ const Collections = () => {
         try {
             let endpoint = formData['@id'] ?? 'collections';
             let apiMethod = formData['@id'] ? api.patch : api.post;
-            console.log(formData, endpoint);
             let payload = {
                 name: formData.name,
                 description: formData.description,
@@ -125,7 +117,7 @@ const Collections = () => {
                 await fetchCollectionsData();
             }
         } catch (error) {
-            console.error('Error:', error);
+
         }
     };
 
@@ -154,6 +146,7 @@ const Collections = () => {
                     onChange={handleChange}
                     logo={descriptionLogo}
                     error={errors.description}
+                    textarea={true}
                 />
                 <MultipleSelectInput
                     label="Choisissez vos items"
