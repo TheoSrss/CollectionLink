@@ -43,7 +43,7 @@ const Profile = () => {
                     "email": formData.email, "username": formData.username
                 }
             });
-            handleApiErrors({});
+            handleApiErrors([]);
         } catch (error) {
 
             if (error.response && error.response.status === 422) {

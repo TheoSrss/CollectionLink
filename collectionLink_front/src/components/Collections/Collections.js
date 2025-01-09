@@ -9,6 +9,8 @@ import titleLogo from "../../assets/svg/title.svg";
 import FormWrapper from "../forms/FormWrapper";
 import Modal from "../Modal";
 import useForm from "../../hooks/useForm";
+import {formatDateTime} from "../../utils/date";
+import Table from "../Table";
 
 const Collections = () => {
     const [collections, setCollections] = useState(null);
@@ -71,9 +73,11 @@ const Collections = () => {
                 name: '', description: '', collectable: []
             }
         }
+        handleApiErrors([]);
         setValues(collection);
         setSelectedItems(collection.collectable);
         setFormOpened(true);
+        setFormError(false);
     };
 
     if (loading) {
@@ -198,21 +202,12 @@ const Collections = () => {
             <div className="flex flex-row gap-3 pb-4">
                 <h1 className="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">Mes collections</h1>
             </div>
-            <table className="table-auto">
-                <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Date de creation</th>
-                    <th>Nombre d'items</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
+            <Table columns={['Titre', 'Date de création', "Nombre d'items", 'Actions']}>
                 {collections.map(collection => (<tr key={collection['@id']}>
                     <td>{collection.name}</td>
-                    <td>DATE</td>
+                    <td>{formatDateTime(collection.createdAt)}</td>
                     <td>{collection.collectable.length}</td>
-                    <td className='text-center'>
+                    <td>
                         <div className="flex justify-center space-x-4">
                             <button
                                 onClick={() => handleOpenForm(collection)}
@@ -228,8 +223,7 @@ const Collections = () => {
                         </div>
                     </td>
                 </tr>))}
-                </tbody>
-            </table>
+            </Table>
         </div>
     </div>);
 };

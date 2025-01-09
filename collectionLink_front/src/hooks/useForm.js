@@ -23,7 +23,6 @@ const useForm = (initialState) => {
     const handleApiErrors = (violations) => {
         const newErrors = {};
         violations.forEach((violation) => {
-            console.log(violation);
             newErrors[violation.propertyPath] = violation.code;
         });
         setErrors(newErrors);
