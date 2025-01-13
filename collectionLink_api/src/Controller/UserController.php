@@ -2,20 +2,26 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class UserController extends AbstractController
+class UserController extends GeneralController
 {
-    public function __invoke(Security $security): JsonResponse
-       {
-           $user = $security->getUser();
+    public function __construct(
+        SerializerInterface $serializer,
+    ) {
+        parent::__construct($serializer);
+    }
 
-           if (!$user) {
-               throw $this->createAccessDeniedException('User not authenticated');
-           }
+    public function __invoke(Security $security): Response
+    {
+        $user = $security->getUser();
 
-           return $this->json($user, 200, [], ['groups' => 'user:read']);
-       }
+        if (!$user) {
+            throw $this->createAccessDeniedException('User not authenticated');
+        }
+
+        return $this->jsonLd($user, 200, ['user:read']);
+    }
 }

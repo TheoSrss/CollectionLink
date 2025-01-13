@@ -4,12 +4,14 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\PublicController;
 use App\Repository\CollectionObjectRepository;
 use App\State\CollectionPersister;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,40 +21,53 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Trait\TimestampableTrait;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Entity(repositoryClass: CollectionObjectRepository::class)]
 #[ApiResource(
-    uriTemplate: '/collections/{id}',
+    normalizationContext: ['groups' => ['collection:read']],
+    denormalizationContext: ['groups' => ['collection:write']],
+    security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
             uriTemplate: '/collections',
         ),
-        new Get(),
+        new Get(
+            uriTemplate: '/collections/{id}',
+        ),
+        new Get(
+            uriTemplate: '/collections/public/{slug}',
+            controller: PublicController::class,
+            read: false,
+            name: 'public_collection',
+            security: "is_granted('PUBLIC_ACCESS')"
+        ),
         new Post(
             uriTemplate: '/collections',
             processor: CollectionPersister::class
         ),
         new Patch(
-            security: "object.getUser() == user",
+            uriTemplate: '/collections/{id}',
+            security: "object.getUser() == user"
         ),
         new Delete(
-            security: "object.getUser() == user",
+            uriTemplate: '/collections/{id}',
+            security: "object.getUser() == user"
         ),
-    ],
-    normalizationContext: ['groups' => ['collection:read']],
-    denormalizationContext: ['groups' => ['collection:write']],
-    security: "is_granted('ROLE_USER')",
-
+    ]
 )]
-#[ApiFilter(SearchFilter::class, properties:['user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\HasLifecycleCallbacks]
- class CollectionObject
+class CollectionObject
 {
     use TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['collection:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -80,6 +95,18 @@ use App\Entity\Trait\TimestampableTrait;
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['collection:write', 'collection:read'])]
     private ?string $description = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['collection:read'])]
+    private ?string $slug = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $password = null;
+
+    #[SerializedName('password')]
+    #[Assert\Length(min: 8)]
+    #[Groups(['collection:write'])]
+    private ?string $plainPassword = null;
 
     public function __construct()
     {
@@ -149,5 +176,59 @@ use App\Entity\Trait\TimestampableTrait;
         $this->description = $description;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function generateSlug(): void
+    {
+        if (!$this->slug) {
+            $uuid = Uuid::v4();
+            $this->slug = substr($uuid->toBase58(), 0, 15);
+        }
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): static
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function isPasswordValid(string|null $plainPassword): bool
+    {
+        if ($this->password === null) {
+            return true;
+        }
+        if ($plainPassword === null) {
+            return false;
+        }
+        return password_verify($plainPassword, $this->password);
     }
 }

@@ -11,6 +11,7 @@ services:
       - '../src/DependencyInjection/'
       - '../src/Entity/'
       - '../src/Kernel.php'
+
   App\State\:
     resource: '../src/State/*'
     bind:

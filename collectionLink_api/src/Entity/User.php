@@ -73,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 3, max: 30)]
-    #[Groups(['user:read', 'user:write', 'collectable:read', 'collection:write','collection:read'])]
+    #[Groups(['user:read', 'user:write', 'collectable:read', 'collection:write', 'collection:read'])]
     private ?string $username = null;
 
     #[ORM\Column(type: 'string')]
@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, CollectionObject>
      */
     #[ORM\OneToMany(targetEntity: CollectionObject::class, mappedBy: 'user', orphanRemoval: true)]
-//    #[Groups(['user:read'])]
+    //    #[Groups(['user:read'])]
     private Collection $collection;
 
     #[ORM\Column(type: 'json')]
@@ -100,7 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Collectable>
      */
     #[ORM\OneToMany(targetEntity: Collectable::class, mappedBy: 'creator', orphanRemoval: true)]
-//    #[Groups(['user:read'])]
+    //    #[Groups(['user:read'])]
     private Collection $collectablesCreated;
 
     public function __construct()

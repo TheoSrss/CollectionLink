@@ -11,6 +11,7 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+      
     login:
       pattern: ^/api/login
       stateless: true
@@ -20,13 +21,14 @@ security:
         password_path: password
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
-        provider: app_user_provider  # Spécifiez le provider ici
+        provider: app_user_provider
+
     api:
       pattern: ^/api
       stateless: true
       jwt: ~
-      provider: app_user_provider  # Spécifiez le provider ici aussi
-    #  Config pour easyAdmin
+      provider: app_user_provider
+
     main:
       lazy: true
       provider: app_user_provider
@@ -39,6 +41,7 @@ security:
         path: app_logout
 
   access_control:
+    - { path: ^/api/collections/public, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/admin/login, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Swagger UI

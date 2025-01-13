@@ -15,19 +15,24 @@ final readonly class CollectionPersister implements ProcessorInterface
     public function __construct(
         private ProcessorInterface $processor,
         private readonly Security  $security
-    )
-    {
-    }
+    ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         if (
             !in_array('byAdmin', $uriVariables) ||
-            !$uriVariables['byAdmin']) {
+            !$uriVariables['byAdmin']
+        ) {
             if ($data instanceof CollectionObject) {
+
                 $user = $this->security->getUser();
                 if ($user instanceof User) {
                     $data->setUser($user);
+                }
+
+                if ($data->getPlainPassword()) {
+                    $hashedPassword = password_hash($data->getPlainPassword(), PASSWORD_DEFAULT);
+                    $data->setPassword($hashedPassword);
                 }
             }
         }
