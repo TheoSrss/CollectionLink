@@ -29,10 +29,13 @@ final readonly class CollectionPersister implements ProcessorInterface
                 if ($user instanceof User) {
                     $data->setUser($user);
                 }
-
-                if ($data->getPlainPassword()) {
-                    $hashedPassword = password_hash($data->getPlainPassword(), PASSWORD_DEFAULT);
-                    $data->setPassword($hashedPassword);
+                if ($data->getChangePassword() === true) {
+                    if (is_null($data->getPlainPassword())) {
+                        $data->setPassword(null);
+                    } elseif (is_string($data->getPlainPassword())) {
+                        $hashedPassword = password_hash($data->getPlainPassword(), PASSWORD_DEFAULT);
+                        $data->setPassword($hashedPassword);
+                    }
                 }
             }
         }

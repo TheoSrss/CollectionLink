@@ -49,7 +49,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
         ),
         new Patch(
             uriTemplate: '/collections/{id}',
-            security: "object.getUser() == user"
+            security: "object.getUser() == user",
+            processor: CollectionPersister::class
         ),
         new Delete(
             uriTemplate: '/collections/{id}',
@@ -106,7 +107,10 @@ class CollectionObject
     #[SerializedName('password')]
     #[Assert\Length(min: 8)]
     #[Groups(['collection:write'])]
-    private ?string $plainPassword = null;
+    private string|null $plainPassword = null;
+
+    #[Groups(['collection:write'])]
+    private bool $changePassword = false;
 
     public function __construct()
     {
@@ -214,10 +218,9 @@ class CollectionObject
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(?string $plainPassword): self
+    public function setPlainPassword(string|null $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
-
         return $this;
     }
 
@@ -230,5 +233,16 @@ class CollectionObject
             return false;
         }
         return password_verify($plainPassword, $this->password);
+    }
+
+    public function getChangePassword(): bool
+    {
+        return $this->changePassword;
+    }
+
+    public function setChangePassword(bool $noPassword): self
+    {
+        $this->changePassword = $noPassword;
+        return $this;
     }
 }
