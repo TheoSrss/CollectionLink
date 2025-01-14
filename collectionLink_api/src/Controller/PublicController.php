@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class PublicController extends GeneralController
 {
@@ -18,8 +20,19 @@ class PublicController extends GeneralController
         parent::__construct($serializer);
     }
 
-    public function __invoke(Request $request, string $slug): Response
+    public function __invoke(Request $request, string $slug, MailerInterface $mailer): Response
     {
+        $email = (new Email())
+            ->from('hi@demomailtrap.com')
+            ->to('theo.sourisseau79@gmail.com')
+            ->subject('Test Email from Symfony')
+            ->text('This is a test email sent using Symfony Mailer!')
+            ->html('<p>This is a test email sent using <b>Symfony Mailer</b>!</p>');
+
+        $mailer->send($email);
+
+        dd('here');
+
         $collection = $this->collectionRepo->findOneBy(['slug' => $slug]);
 
         if (!$collection) {
