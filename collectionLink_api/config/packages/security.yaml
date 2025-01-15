@@ -41,13 +41,14 @@ security:
         path: app_logout
 
   access_control:
-    - { path: ^/api/collections/public, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/admin/login, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Swagger UI
-    - { path: ^/api/contexts, roles: PUBLIC_ACCESS }  # Pour les contextes JSON-LD
+    - { path: ^/api/collections/public, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Swagger UI
+    - { path: ^/api/verify_email, roles: PUBLIC_ACCESS } # Swagger UI
+    - { path: ^/api/contexts, roles: PUBLIC_ACCESS }  # Pour les contextes JSON-LD
+    - { path: ^/api, roles: ROLE_USER }
 
 when@test:
   security:

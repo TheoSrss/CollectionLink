@@ -35,7 +35,7 @@ use App\Entity\Trait\TimestampableTrait;
         ),
         new Get(
             uriTemplate: '/profile',
-            controller: UserController::class,
+            controller: UserController::class . '::profile',
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'profile'
@@ -102,6 +102,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Collectable::class, mappedBy: 'creator', orphanRemoval: true)]
     //    #[Groups(['user:read'])]
     private Collection $collectablesCreated;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['user:read'])]
+    private ?string $verificationCode = null;
 
     public function __construct()
     {
@@ -191,9 +195,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             return in_array($role, self::$allRoles);
         });
 
-        if (!in_array(self::ROLE_USER, $accepted)) {
-            $accepted[] = self::ROLE_USER;
-        }
         $this->roles = array_unique($accepted);
 
         return $this;
@@ -242,7 +243,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCollectablesCreated(Collectable $collectablesCreated): static
     {
         if ($this->collectablesCreated->removeElement($collectablesCreated)) {
-            // set the owning side to null (unless already changed)
             if ($collectablesCreated->getCreator() === $this) {
                 $collectablesCreated->setCreator(null);
             }
@@ -254,5 +254,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->username . ' | ' . $this->email;
+    }
+
+    public function getVerificationCode(): ?string
+    {
+        return $this->verificationCode;
+    }
+
+    public function setVerificationCode(string $verificationCode): self
+    {
+        $this->verificationCode = $verificationCode;
+
+        return $this;
     }
 }

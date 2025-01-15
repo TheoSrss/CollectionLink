@@ -12,7 +12,7 @@ class GeneralController extends AbstractController
         protected SerializerInterface $serializer
     ) {}
 
-    protected function jsonLd(
+    protected function JsonResponse(
         mixed $data,
         int $status = 200,
         array $groups = [],
