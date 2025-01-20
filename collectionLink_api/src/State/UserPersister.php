@@ -5,6 +5,7 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\User;
+use App\Security\CodeService;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\MailerService;
 
@@ -16,7 +17,8 @@ final readonly class UserPersister implements ProcessorInterface
     public function __construct(
         private ProcessorInterface          $processor,
         private UserPasswordHasherInterface $passwordHasher,
-        private MailerService               $mailer
+        private MailerService               $mailer,
+        private CodeService                 $codeService
     ) {}
 
     /**
@@ -40,8 +42,8 @@ final readonly class UserPersister implements ProcessorInterface
         }
 
         if (!in_array(User::ROLE_USER, $data->getRoles())) {
-            $verificationCode = random_int(100000, 999999);
-            $data->setVerificationCode((string)$verificationCode);
+            $verificationCode = $this->codeService->generateNewCode();
+            $data->setVerificationCode($verificationCode);
             $this->mailer->sendValidationCode($data->getEmail(), $verificationCode);
         }
 

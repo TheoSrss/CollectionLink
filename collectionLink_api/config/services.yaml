@@ -5,6 +5,7 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  # App Namespace Configuration
   App\:
     resource: '../src/'
     exclude:
@@ -12,10 +13,13 @@ services:
       - '../src/Entity/'
       - '../src/Kernel.php'
 
+  # State Configuration
   App\State\:
     resource: '../src/State/*'
     bind:
       $processor: '@api_platform.doctrine.orm.state.persist_processor'
+
+  # Service Configuration
   App\Service\EntityProcessorService:
     arguments:
       $processors: !tagged_iterator api_platform.state_processor

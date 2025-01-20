@@ -11,7 +11,6 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
-      
     login:
       pattern: ^/api/login
       stateless: true
@@ -22,6 +21,11 @@ security:
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
         provider: app_user_provider
+
+    public_endpoints:
+      pattern: ^/api/(docs|register|forgot-password|reset-password|collections/public|)
+      stateless: true
+      security: false
 
     api:
       pattern: ^/api
@@ -41,13 +45,15 @@ security:
         path: app_logout
 
   access_control:
+    # ADMIN
     - { path: ^/admin/login, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/api/collections/public, roles: PUBLIC_ACCESS, methods: [GET] }
+    
+    # Public endpoints
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api/docs, roles: PUBLIC_ACCESS } # Swagger UI
-    - { path: ^/api/verify_email, roles: PUBLIC_ACCESS } # Swagger UI
-    - { path: ^/api/contexts, roles: PUBLIC_ACCESS }  # Pour les contextes JSON-LD
+    
+    # Protected endpoints
+    - { path: ^/api/verify-email, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/api, roles: ROLE_USER }
 
 when@test:

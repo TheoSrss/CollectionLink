@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\UserController;
+use App\Dto\PasswordForgottenNewPasswordInput;
+use App\Dto\PasswordForgottenRequestInput;
 use App\Repository\UserRepository;
 use App\State\UserPersister;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,6 +21,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Trait\TimestampableTrait;
+use App\State\PasswordForgottenNewPasswordProcessor;
+use App\State\PasswordForgottenRequestProcessor;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -26,6 +30,7 @@ use App\Entity\Trait\TimestampableTrait;
     operations: [
         new Get(),
         new Post(
+            uriTemplate: '/register',
             security: "is_granted('PUBLIC_ACCESS')",
             validationContext: ['groups' => ['Default', 'user:create']],
             processor: UserPersister::class
@@ -39,6 +44,26 @@ use App\Entity\Trait\TimestampableTrait;
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'profile'
+        ),
+        new Post(
+            uriTemplate: '/verify-email',
+            controller: UserController::class . '::verifyEmailAddress',
+            name: 'verify_email',
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+        ),
+        new Post(
+            uriTemplate: '/forgot-password',
+            security: "is_granted('PUBLIC_ACCESS')",
+            input: PasswordForgottenRequestInput::class,
+            processor: PasswordForgottenRequestProcessor::class,
+            denormalizationContext: ['groups' => ['user:forgot-password']],
+        ),
+        new Post(
+            uriTemplate: '/reset-password',
+            security: "is_granted('PUBLIC_ACCESS')",
+            input: PasswordForgottenNewPasswordInput::class,
+            processor: PasswordForgottenNewPasswordProcessor::class,
+            denormalizationContext: ['groups' => ['user:forgot-password']],
         ),
     ],
     normalizationContext: ['groups' => ['user:read']],
@@ -67,7 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email()]
     #[Assert\NotBlank()]
     #[Assert\Length(max: 100)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'user:forgot-password'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
@@ -90,7 +115,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, CollectionObject>
      */
     #[ORM\OneToMany(targetEntity: CollectionObject::class, mappedBy: 'user', orphanRemoval: true)]
-    //    #[Groups(['user:read'])]
     private Collection $collection;
 
     #[ORM\Column(type: 'json')]
@@ -100,12 +124,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Collectable>
      */
     #[ORM\OneToMany(targetEntity: Collectable::class, mappedBy: 'creator', orphanRemoval: true)]
-    //    #[Groups(['user:read'])]
     private Collection $collectablesCreated;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['user:read'])]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?string $verificationCode = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $passwordForgottenCode = null;
 
     public function __construct()
     {
@@ -256,14 +281,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username . ' | ' . $this->email;
     }
 
-    public function getVerificationCode(): ?string
+    public function getVerificationCode(): ?int
     {
         return $this->verificationCode;
     }
 
-    public function setVerificationCode(string $verificationCode): self
+    public function setVerificationCode(int $verificationCode): self
     {
         $this->verificationCode = $verificationCode;
+
+        return $this;
+    }
+
+    public function getPasswordForgottenCode(): ?int
+    {
+        return $this->passwordForgottenCode;
+    }
+
+    public function setPasswordForgottenCode(?int $code): self
+    {
+        $this->passwordForgottenCode = $code;
 
         return $this;
     }

@@ -32,7 +32,6 @@ class UserController extends GeneralController
         return $this->JsonResponse($user, 200, ['user:read']);
     }
 
-    #[Route('api/verify_email', name: 'verify-email', methods: ['POST'])]
     public function verifyEmailAddress(
         Request $request,
         EntityManagerInterface $em

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use App\Entity\User;
 
 class MailerService
 {
@@ -35,6 +36,15 @@ class MailerService
             $email,
             'Bienvenue sur CollectionLink! Votre code de validation',
             "Bonjour,\n\nVotre code de validation est: $verificationCode\n\nBienvenue sur CollectionLink!"
+        );
+    }
+
+    public function sendPasswordResetEmail(User $user, int $code): void
+    {
+        $this->sendEmail(
+            $user->getEmail(),
+            'Réinitialisation de votre mot de passe',
+            "Bonjour,\n\nPour réinitialiser votre mot de passe, veuillez utiliser le code suivant: $code \n\nMerci de prendre en compte seulement le dernier code reçu.",
         );
     }
 }
