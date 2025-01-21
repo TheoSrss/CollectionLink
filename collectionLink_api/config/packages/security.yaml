@@ -23,7 +23,7 @@ security:
         provider: app_user_provider
 
     public_endpoints:
-      pattern: ^/api/(docs|register|forgot-password|reset-password|collections/public|)
+      pattern: ^/api/(docs|register|forgot-password|reset-password|collections/public)
       stateless: true
       security: false
 
