@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Trait\TimestampableTrait;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: CollectionObjectRepository::class)]
 #[ApiResource(
@@ -244,5 +246,23 @@ class CollectionObject
     {
         $this->changePassword = $noPassword;
         return $this;
+    }
+
+    #[Groups(['collection:read'])]
+    public function isPrivate(): bool
+    {
+        return $this->password !== null;
+    }
+
+    #[Assert\Callback]
+    public function validatePlainPassword(ExecutionContextInterface $context, mixed $payload): void
+    {
+        if (($this->changePassword && empty($this->plainPassword)) && empty($this->password)) {
+            $notBlankConstraint = new NotBlank();
+            $context->buildViolation($notBlankConstraint->message)
+                ->atPath('plainPassword')
+                ->setCode($notBlankConstraint::IS_BLANK_ERROR)
+                ->addViolation();
+        }
     }
 }
