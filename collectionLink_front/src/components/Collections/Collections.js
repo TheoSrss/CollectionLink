@@ -6,11 +6,13 @@ import TextInput from "../forms/TextInput";
 import MultipleSelectInput from "../forms/MultipleSelectInput";
 import descriptionLogo from "../../assets/svg/description.svg";
 import titleLogo from "../../assets/svg/title.svg";
+import passwordLogo from "../../assets/svg/password.svg";
 import FormWrapper from "../forms/FormWrapper";
 import Modal from "../Modal";
 import useForm from "../../hooks/useForm";
 import {formatDateTime} from "../../utils/date";
 import Table from "../Table";
+import Toggle from "../forms/Toggle";
 
 const Collections = () => {
     const [collections, setCollections] = useState(null);
@@ -18,15 +20,17 @@ const Collections = () => {
     const {user} = useAuth();
     const [items, setItems] = useState(null);
     const [formOpened, setFormOpened] = useState(false);
-    const [collectionEdited, setCollectionEdited] = useState({
-        name: '', description: '', collectable: []
-    });
+
+    const defaultCollection = {
+        name: '', description: '', collectable: [], changePassword: null, password: null
+    }
     const [selectedItems, setSelectedItems] = useState([]);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [collectionToDelete, setCollectionToDelete] = useState(null);
     const [formError, setFormError] = useState(false);
+    const [passwordExist, setPasswordExist] = useState(false);
 
-    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(collectionEdited);
+    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(defaultCollection);
     // Modal logic
     useEffect(() => {
         if (user) {
@@ -62,11 +66,10 @@ const Collections = () => {
             await fetchItemsData();
         }
         if (collection === null) {
-            collection = {
-                name: '', description: '', collectable: []
-            }
+            collection = defaultCollection;
         }
         handleApiErrors([]);
+        setPasswordExist(collection.private);
         setValues(collection);
         setSelectedItems(collection.collectable);
         setFormOpened(true);
@@ -89,6 +92,8 @@ const Collections = () => {
                 name: formData.name,
                 description: formData.description,
                 collectable: selectedItems.map((item) => item['@id']),
+                changePassword: passwordExist && formData.deletePassword ? true : formData.changePassword,
+                password: formData.password,
             };
             const res = await apiMethod(endpoint.replace('/api/', ''), {json: payload});
             if (res.ok) {
@@ -157,6 +162,31 @@ const Collections = () => {
                     onChange={handleSelectionChange}
                     error={errors.collectable}
                 />
+                {passwordExist && (
+                    <p className="mb-6">Cette collection est actuellement en privée. Un mot de passe est requis pour la
+                        consultation.</p>)}
+                {passwordExist && !values.changePassword && (<Toggle
+                    name="deletePassword"
+                    label='Supprimer le mot de passe (va rendre la collection public)'
+                    value={values.deletePassword}
+                    onChange={handleChange}
+                    error={errors.deletePassword}
+                />)}
+                <Toggle
+                    name="changePassword"
+                    label={passwordExist ? 'Nouveau mot de passe' : 'Ajouter un mot de passe'}
+                    value={values.changePassword}
+                    onChange={handleChange}
+                    error={errors.changePassword}
+                />
+                {values.changePassword && (<TextInput
+                    name="password"
+                    label="Mot de passe"
+                    value={values.password}
+                    onChange={handleChange}
+                    logo={passwordLogo}
+                    error={errors.password}
+                />)}
                 <button type="submit"
                         className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">
                     {values['@id'] ? 'Mettre à jour' : 'Créer'}
