@@ -11,6 +11,7 @@ import './css/satoshi.css';
 import Profile from "./components/Profile/Profile";
 import Collections from "./components/Collections/Collections";
 import Items from "./components/Items/Items";
+import PasswordForgotten from "./components/Authentification/PasswordForgotten";
 
 const PrivateLayout = ({sidebarOpen, setSidebarOpen}) => (
     <div className="flex h-screen overflow-hidden">
@@ -41,6 +42,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/login" element={<Login/>}/>
+                    <Route path="/passwordForgotten" element={<PasswordForgotten/>}/>
                     <Route path="/" element={
                         <PrivateRoute>
                             <PrivateLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>

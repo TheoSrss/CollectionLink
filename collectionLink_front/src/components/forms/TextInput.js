@@ -1,8 +1,22 @@
 import defaultLogo from "../../assets/svg/defaultFormSvg/TextInput.svg"
 import {getErrorMessage} from '../../constants';
+import PasswordRules from "./PasswordRules";
 
-const TextInput = ({name, label, value, placeholder, onChange, error, logo, isPassword = false, textarea = false}) => {
+const TextInput = ({
+                       name,
+                       label,
+                       value,
+                       placeholder,
+                       onChange,
+                       error,
+                       logo,
+                       isPassword = false,
+                       isPasswordEditing = false,
+                       textarea = false,
+                       isNumber = false
+                   }) => {
     const errorMessage = getErrorMessage(error);
+
 
     return (<div className="my-6">
         <label
@@ -23,7 +37,7 @@ const TextInput = ({name, label, value, placeholder, onChange, error, logo, isPa
                 placeholder={placeholder}
                 className={`w-full rounded-lg border border-stroke bg-transparent py-4 pl-12 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary dark:text-gray-100 ${error ? 'border-red-500' : ''}`}
             /> : <input
-                type={isPassword ? "password" : "text"}
+                type={isPassword ? "password" : isNumber ? "number" : "text"}
                 id={name}
                 name={name}
                 value={value != null ? value : ''}
@@ -33,6 +47,7 @@ const TextInput = ({name, label, value, placeholder, onChange, error, logo, isPa
             />}
         </div>
         {error && <span className="text-sm text-red-600 dark:text-red-500">{errorMessage}</span>}
+        {isPasswordEditing && <PasswordRules password={value || ""}/>}
     </div>)
 };
 export default TextInput;

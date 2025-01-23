@@ -45,7 +45,6 @@ const Profile = () => {
             });
             handleApiErrors([]);
         } catch (error) {
-
             if (error.response && error.response.status === 422) {
                 const data = await error.response.json();
                 if (data.violations) {
