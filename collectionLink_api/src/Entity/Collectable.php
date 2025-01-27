@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\CollectableRepository;
 use App\State\CollectablePersister;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -73,6 +75,17 @@ class Collectable
     #[Groups(['collectable:read', 'collectable:write', 'collection:read'])]
     private ?string $description = null;
 
+    /**
+     * @var Collection<int, Picture>
+     */
+    #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'collectable', orphanRemoval: true)]
+    private Collection $pictures;
+
+    public function __construct()
+    {
+        $this->pictures = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,5 +141,35 @@ class Collectable
     public function __toString():string
     {
         return $this->getId()." | ".  $this->getName();
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): static
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures->add($picture);
+            $picture->setCollectable($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): static
+    {
+        if ($this->pictures->removeElement($picture)) {
+            // set the owning side to null (unless already changed)
+            if ($picture->getCollectable() === $this) {
+                $picture->setCollectable(null);
+            }
+        }
+
+        return $this;
     }
 }

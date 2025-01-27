@@ -33,6 +33,7 @@ use App\State\PasswordForgottenRequestProcessor;
             uriTemplate: '/register',
             security: "is_granted('PUBLIC_ACCESS')",
             validationContext: ['groups' => ['Default', 'user:create']],
+            normalizationContext: ['groups' => ['user:read', 'user:create']],
             processor: UserPersister::class
         ),
         new Patch(
@@ -41,7 +42,7 @@ use App\State\PasswordForgottenRequestProcessor;
         new Get(
             uriTemplate: '/profile',
             controller: UserController::class . '::profile',
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
             name: 'profile'
         ),
@@ -116,8 +117,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: CollectionObject::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $collection;
-
     #[ORM\Column(type: 'json')]
+    #[Groups(['user:read'])]
     private array $roles = [];
 
     /**
