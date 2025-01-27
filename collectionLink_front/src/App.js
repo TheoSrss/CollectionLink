@@ -12,6 +12,7 @@ import Profile from "./components/Profile/Profile";
 import Collections from "./components/Collections/Collections";
 import Items from "./components/Items/Items";
 import PasswordForgotten from "./components/Authentification/PasswordForgotten";
+import Public from "./components/Public/Public";
 
 const PrivateLayout = ({sidebarOpen, setSidebarOpen}) => (
     <div className="flex h-screen overflow-hidden">
@@ -54,6 +55,7 @@ function App() {
                         <Route path="collections" element={<Collections/>}/>
                         <Route path="items" element={<Items/>}/>
                     </Route>
+                    <Route path="/:slug" element={<Public/>} />
                     <Route path="*" element={<Navigate to="/" replace/>}/>
                 </Routes>
             </Router>

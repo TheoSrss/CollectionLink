@@ -64,7 +64,6 @@ const Profile = () => {
             <div className="flex flex-row gap-3 pb-4">
                 <h1 className="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">Mon profil</h1>
             </div>
-
             <FormWrapper onSubmit={handleSubmit(onSubmit)} error={formError}>
                 <TextInput
                     name="email"
