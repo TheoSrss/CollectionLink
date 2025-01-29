@@ -90,7 +90,6 @@ function Sidebar({
                     aria-hidden="true">
                 •••
               </span>
-                            {/*<span className="lg:hidden lg:sidebar-expanded:block 2xl:block">Pages</span>*/}
                         </h3>
                         <ul className="mt-3">
                             {/* Messages */}

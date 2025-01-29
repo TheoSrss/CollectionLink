@@ -1,6 +1,8 @@
 import React, {createContext, useCallback, useContext, useEffect, useReducer} from 'react';
 import {isAuthenticated, login as authLogin, logout as authLogout} from '../services/auth';
 import api from "../services/api";
+import {secureStorage} from "../utils/secureStorage";
+import {TOKEN_KEY} from "../constants";
 
 const AuthContext = createContext(null);
 
@@ -11,33 +13,24 @@ const authReducer = (state, action) => {
             return {...state, loading: true};
         case 'AUTH_CHECK_COMPLETE':
             return {
-                loading: false,
-                authenticated: action.payload.authenticated,
-                user: action.payload.user
+                loading: false, authenticated: action.payload.authenticated, user: action.payload.user
             };
         case 'SET_USER':
             return {
-                ...state,
-                loading: false,
-                authenticated: true,
-                user: action.payload
+                ...state, loading: false, authenticated: true, user: action.payload
             };
         case 'LOGOUT':
             return {
-                loading: false,
-                authenticated: false,
-                user: null
+                loading: false, authenticated: false, user: null
             };
         default:
             return state;
     }
 };
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
     const [state, dispatch] = useReducer(authReducer, {
-        loading: true,
-        authenticated: false,
-        user: null
+        loading: true, authenticated: false, user: null
     });
 
     // Vérification de l'authentification
@@ -49,28 +42,22 @@ export const AuthProvider = ({ children }) => {
             try {
                 const profileResponse = await api.get('profile').json();
                 dispatch({
-                    type: 'AUTH_CHECK_COMPLETE',
-                    payload: {
-                        authenticated: true,
-                        user: profileResponse
+                    type: 'AUTH_CHECK_COMPLETE', payload: {
+                        authenticated: true, user: profileResponse
                     }
                 });
             } catch (error) {
                 dispatch({
-                    type: 'AUTH_CHECK_COMPLETE',
-                    payload: {
-                        authenticated: false,
-                        user: null
+                    type: 'AUTH_CHECK_COMPLETE', payload: {
+                        authenticated: false, user: null
                     }
                 });
                 authLogout();
             }
         } else {
             dispatch({
-                type: 'AUTH_CHECK_COMPLETE',
-                payload: {
-                    authenticated,
-                    user: state.user
+                type: 'AUTH_CHECK_COMPLETE', payload: {
+                    authenticated, user: state.user
                 }
             });
         }
@@ -86,11 +73,7 @@ export const AuthProvider = ({ children }) => {
     const loginUser = async (username, password) => {
         const response = await authLogin(username, password);
         if (response.token) {
-            const profileResponse = await api.get('profile').json();
-            dispatch({
-                type: 'SET_USER',
-                payload: {...profileResponse, token: response.token}
-            });
+            await updateUser();
         }
     };
 
@@ -99,19 +82,25 @@ export const AuthProvider = ({ children }) => {
         dispatch({type: 'LOGOUT'});
     };
 
-    return (
-        <AuthContext.Provider
-            value={{
-                user: state.user,
-                loading: state.loading,
-                authenticated: state.authenticated,
-                loginUser,
-                logoutUser
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+    const updateUser = async () => {
+        const profileResponse = await api.get('profile').json();
+        dispatch({
+            type: 'SET_USER', payload: {...profileResponse, token: secureStorage.getItem(TOKEN_KEY)}
+        });
+    }
+
+    return (<AuthContext.Provider
+        value={{
+            user: state.user,
+            loading: state.loading,
+            authenticated: state.authenticated,
+            loginUser,
+            logoutUser,
+            updateUser,
+        }}
+    >
+        {children}
+    </AuthContext.Provider>);
 };
 
 export const useAuth = () => {

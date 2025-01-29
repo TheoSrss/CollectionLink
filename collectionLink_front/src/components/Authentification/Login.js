@@ -32,7 +32,7 @@ const Login = () => {
         }
     };
     if (user) {
-        return <Navigate to="/dashbord" replace/>;
+        return <Navigate to="/dashboard" replace/>;
     }
     return (<div className="h-screen flex items-center justify-center">
         <div
@@ -41,7 +41,8 @@ const Login = () => {
                 <div>
                     <img src={logo} width="61" alt="Logo"/>
                 </div>
-                <h1 className="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">CollectionLink</h1>
+                <h1 className="text-3xl font-bold dark:text-gray-300  my-auto"><span
+                    className='text-gray-400 dark:text-gray-500'> CollectionLink |</span> Connexion</h1>
             </div>
             {loginError && <div className="text-red-500 mb-4">{loginError}</div>}
 
@@ -50,7 +51,7 @@ const Login = () => {
                     name="username"
                     label="Username"
                     value={values.username}
-                    placeholder="satoshin@gmx.com"
+                    placeholder="satoshin"
                     onChange={handleChange}
                     error={errors.username}
                     logo={emailLogo}
@@ -69,9 +70,14 @@ const Login = () => {
                     <span className="text-sm underline cursor-pointer">Mot de pass oublié</span>
                 </NavLink>
                 <button type="submit"
-                        className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-6">Connexion
+                        className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-6 mb-2">Connexion
                 </button>
             </FormWrapper>
+            <div className='text-center'>
+                <NavLink to="/registration">
+                    <span className="text-sm underline cursor-pointer m-auto">Je n'ai pas de compte</span>
+                </NavLink>
+            </div>
             <div className="relative flex py-8 items-center">
                 <div className="flex-grow border-t border-[1px] border-gray-200"></div>
                 <span className="flex-shrink mx-4 font-medium text-gray-500">OR</span>

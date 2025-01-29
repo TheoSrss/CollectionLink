@@ -1,4 +1,3 @@
-import defaultLogo from "../../assets/svg/defaultFormSvg/TextInput.svg"
 import {getErrorMessage} from '../../constants';
 import PasswordRules from "./PasswordRules";
 
@@ -27,7 +26,7 @@ const TextInput = ({
         <div className="relative text-gray-400 mb-2">
             <span
                 className="absolute inset-y-0 left-0 flex items-center p-1 pl-3 ">
-                <img src={logo ? logo : defaultLogo} className="max-h-6"/>
+                {logo ?? null}
         </span>
             {textarea ? <textarea
                 id={name}
