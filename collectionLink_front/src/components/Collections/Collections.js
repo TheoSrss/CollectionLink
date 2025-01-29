@@ -4,15 +4,13 @@ import Loading from "../Loading";
 import {useAuth} from "../../context/AuthContext";
 import TextInput from "../forms/TextInput";
 import MultipleSelectInput from "../forms/MultipleSelectInput";
-import descriptionLogo from "../../assets/svg/description.svg";
-import titleLogo from "../../assets/svg/title.svg";
-import passwordLogo from "../../assets/svg/password.svg";
 import FormWrapper from "../forms/FormWrapper";
 import Modal from "../Modal";
 import useForm from "../../hooks/useForm";
 import {formatDateTime} from "../../utils/date";
 import Table from "../Table";
 import Toggle from "../forms/Toggle";
+import {KeySquare, LetterText, Type} from "lucide-react";
 
 const Collections = () => {
     const [collections, setCollections] = useState(null);
@@ -141,7 +139,7 @@ const Collections = () => {
                     value={values.name}
                     placeholder="Collection de vinyle"
                     onChange={handleChange}
-                    logo={titleLogo}
+                    logo={<Type/>}
                     error={errors.name}
                 />
                 <TextInput
@@ -149,7 +147,7 @@ const Collections = () => {
                     label="Description"
                     value={values.description}
                     onChange={handleChange}
-                    logo={descriptionLogo}
+                    logo={<LetterText/>}
                     error={errors.description}
                     textarea={true}
                 />
@@ -184,7 +182,7 @@ const Collections = () => {
                     label="Mot de passe"
                     value={values.password}
                     onChange={handleChange}
-                    logo={passwordLogo}
+                    logo={<KeySquare/>}
                     error={errors.password}
                 />)}
                 <button type="submit"

@@ -8,9 +8,8 @@ import Modal from "../Modal";
 import useForm from "../../hooks/useForm";
 import FormWrapper from "../forms/FormWrapper";
 import TextInput from "../forms/TextInput";
-import titleLogo from "../../assets/svg/title.svg";
-import descriptionLogo from "../../assets/svg/description.svg";
 import Toggle from "../forms/Toggle";
+import {LetterText, Type} from "lucide-react";
 
 const Items = () => {
     const [items, setItems] = useState(null);
@@ -115,7 +114,7 @@ const Items = () => {
                     value={values.name}
                     placeholder="Mon item"
                     onChange={handleChange}
-                    logo={titleLogo}
+                    logo={<Type/>}
                     error={errors.name}
                 />
                 <TextInput
@@ -123,7 +122,7 @@ const Items = () => {
                     label="Description"
                     value={values.description}
                     onChange={handleChange}
-                    logo={descriptionLogo}
+                    logo={<LetterText/>}
                     error={errors.description}
                     textarea={true}
                 />
@@ -132,7 +131,6 @@ const Items = () => {
                     label="Public"
                     value={values.public ?? false}
                     onChange={handleChange}
-                    // logo={descriptionLogo}
                     error={errors.public}
                 />
                 <button type="submit"

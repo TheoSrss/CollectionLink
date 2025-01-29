@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import FormWrapper from "../forms/FormWrapper";
 import TextInput from "../forms/TextInput";
-import emailLogo from "../../assets/svg/email.svg";
 import useForm from "../../hooks/useForm";
 import api from "../../services/api";
 import Loading from "../Loading";
+import {Mail, User} from "lucide-react";
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -72,7 +72,7 @@ const Profile = () => {
                     placeholder="satoshin@gmx.com"
                     onChange={handleChange}
                     error={errors.email}
-                    logo={emailLogo}
+                    logo={<Mail/>}
                 />
                 <TextInput
                     name="username"
@@ -81,7 +81,7 @@ const Profile = () => {
                     placeholder="Nom d'utilisateur"
                     onChange={handleChange}
                     error={errors.username}
-                    logo={emailLogo}
+                    logo={<User/>}
                 />
                 <button type="submit"
                         className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">

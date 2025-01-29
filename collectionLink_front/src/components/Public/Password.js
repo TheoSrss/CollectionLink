@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import TextInput from "../forms/TextInput";
 import FormWrapper from "../forms/FormWrapper";
 import useForm from "../../hooks/useForm";
-import passwordLogo from "../../assets/svg/password.svg";
+import {KeySquare} from 'lucide-react';
 
 const Password = ({password, setPassword,error}) => {
     const [localPassword, setLocalPassword] = useState(password || "");
@@ -30,7 +30,7 @@ const Password = ({password, setPassword,error}) => {
                         label="Mot de passe"
                         value={values.password}
                         onChange={handleChange}
-                        logo={passwordLogo}
+                        logo={<KeySquare/>}
                         error={errors.password}
                     />
                     <button type="submit"

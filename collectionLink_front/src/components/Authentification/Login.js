@@ -2,11 +2,10 @@ import React, {useState} from 'react';
 import FormWrapper from "../forms/FormWrapper";
 import TextInput from "../forms/TextInput";
 import useForm from "../../hooks/useForm";
-import emailLogo from "../../assets/svg/email.svg";
-import passwordLogo from "../../assets/svg/password.svg";
 import logo from "../../assets/svg/logo.svg";
 import {Navigate, NavLink} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext";
+import {KeySquare, Mail} from "lucide-react";
 
 const Login = () => {
     const {user, loginUser} = useAuth();
@@ -54,7 +53,7 @@ const Login = () => {
                     placeholder="satoshin"
                     onChange={handleChange}
                     error={errors.username}
-                    logo={emailLogo}
+                    logo={<Mail/>}
                 />
                 <TextInput
                     isPassword={true}
@@ -64,7 +63,7 @@ const Login = () => {
                     placeholder="••••••••••"
                     onChange={handleChange}
                     error={errors.password}
-                    logo={passwordLogo}
+                    logo={<KeySquare/>}
                 />
                 <NavLink to="/passwordForgotten">
                     <span className="text-sm underline cursor-pointer">Mot de pass oublié</span>
