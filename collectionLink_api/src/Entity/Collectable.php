@@ -45,7 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['collectable:write']],
     security: "is_granted('ROLE_USER')"
 )]
-#[ApiFilter(SearchFilter::class, properties:['creator' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['creator' => 'exact'])]
 #[ORM\HasLifecycleCallbacks]
 class Collectable
 {
@@ -78,7 +78,8 @@ class Collectable
     /**
      * @var Collection<int, Picture>
      */
-    #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'collectable', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'collectable', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[Groups(['collectable:read'])]
     private Collection $pictures;
 
     public function __construct()
@@ -138,9 +139,9 @@ class Collectable
 
         return $this;
     }
-    public function __toString():string
+    public function __toString(): string
     {
-        return $this->getId()." | ".  $this->getName();
+        return $this->getId() . " | " .  $this->getName();
     }
 
     /**
@@ -164,7 +165,6 @@ class Collectable
     public function removePicture(Picture $picture): static
     {
         if ($this->pictures->removeElement($picture)) {
-            // set the owning side to null (unless already changed)
             if ($picture->getCollectable() === $this) {
                 $picture->setCollectable(null);
             }

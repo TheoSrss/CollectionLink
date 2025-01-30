@@ -2,21 +2,50 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Trait\TimestampableTrait;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Attribute\Groups;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use App\State\PictureProcessor;
+use App\Dto\CollectablePictureRequestDto;
+
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
-#[ApiResource]
+#[Vich\Uploadable]
+#[ApiResource(
+    operations: [
+        new Post(
+            uriTemplate: '/collectables/{id}/pictures',
+            processor: PictureProcessor::class,
+            input: CollectablePictureRequestDto::class,
+            // security: "object.getCollectable() !== null and object.getCollectable() === user",
+            inputFormats: ['multipart' => ['multipart/form-data']]
+        )
+    ],
+)]
 class Picture
 {
+    use TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Vich\UploadableField(mapping: 'collectables_pictures', fileNameProperty: 'name', size: 'fileSize')]
+    private ?File $file = null;
+
     #[ORM\Column(length: 255)]
-    private ?string $filePath = null;
+    #[Groups(['collectable:read'])]
+    private ?string $name = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['collectable:read'])]
+    private ?int $fileSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'pictures')]
     #[ORM\JoinColumn(nullable: false)]
@@ -27,14 +56,44 @@ class Picture
         return $this->id;
     }
 
-    public function getFilePath(): ?string
+    public function setFile(?File $file = null): void
     {
-        return $this->filePath;
+        $this->file = $file;
+
+        if ($file) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+
+        if ($file && !$this->getId()) {
+            $this->createdAt  = new \DateTimeImmutable();
+        }
     }
 
-    public function setFilePath(string $filePath): static
+    public function getFile(): ?File
     {
-        $this->filePath = $filePath;
+        return $this->file;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getFileSize(): ?int
+    {
+        return $this->fileSize;
+    }
+
+    public function setFileSize(?int $fileSize): self
+    {
+        $this->fileSize = $fileSize;
 
         return $this;
     }
@@ -50,4 +109,9 @@ class Picture
 
         return $this;
     }
+
+    // public function getUrl(): ?string
+    // {
+    //     return $this->filePath ? '/uploads/photos/' . $this->filePath : null;
+    // }
 }

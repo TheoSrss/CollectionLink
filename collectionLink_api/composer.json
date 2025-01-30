@@ -30,9 +30,9 @@
         "symfony/runtime": "7.1.*",
         "symfony/security-bundle": "7.1.*",
         "symfony/serializer": "7.1.*",
-        "symfony/twig-bundle": "7.1.*",
         "symfony/validator": "7.1.*",
-        "symfony/yaml": "7.1.*"
+        "symfony/yaml": "7.1.*",
+        "vich/uploader-bundle": "^2.5"
     },
     "config": {
         "allow-plugins": {
@@ -84,6 +84,7 @@
         }
     },
     "require-dev": {
+        "morrislaptop/var-dumper-with-context": "^0.3.2",
         "symfony/maker-bundle": "^1.60"
     }
 }

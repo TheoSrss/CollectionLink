@@ -14,15 +14,14 @@ final readonly class CollectablePersister implements ProcessorInterface
     public function __construct(
         private ProcessorInterface $processor,
         private readonly Security  $security
-    )
-    {
-    }
+    ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         if (
             !in_array('byAdmin', $uriVariables) ||
-            !$uriVariables['byAdmin']) {
+            !$uriVariables['byAdmin']
+        ) {
             if ($data instanceof Collectable) {
                 $user = $this->security->getUser();
                 if ($user instanceof User) {
