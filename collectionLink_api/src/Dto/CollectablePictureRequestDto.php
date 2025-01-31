@@ -7,17 +7,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 readonly class CollectablePictureRequestDto
 {
-
     #[Assert\All([
         new Assert\File(
             maxSize: '5M',
             mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
         )
     ])]
-    public array $files;
+    public array $pictures;
 
-    public function __construct(array $files = [])
+    public function __construct(array $pictures = [])
     {
-        $this->files = $files;
+        $this->pictures = $pictures;
     }
 }

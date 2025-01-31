@@ -18,6 +18,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use App\Entity\Trait\TimestampableTrait;
+use App\Validator\Constraints\MaxPicturesCount;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CollectableRepository::class)]
@@ -80,6 +81,8 @@ class Collectable
      */
     #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'collectable', orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[Groups(['collectable:read'])]
+    #[Assert\Valid]
+    #[MaxPicturesCount()]
     private Collection $pictures;
 
     public function __construct()
