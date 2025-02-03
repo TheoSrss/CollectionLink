@@ -9,6 +9,7 @@ import Modal from "../Modal";
 import useForm from "../../hooks/useForm";
 import {formatDateTime} from "../../utils/date";
 import Table from "../Table";
+import Clipboard from "../Clipboard";
 import Toggle from "../forms/Toggle";
 import {KeySquare, LetterText, Type} from "lucide-react";
 
@@ -129,6 +130,7 @@ const Collections = () => {
         setDeleteModalOpen(true);
     };
 
+    // const navigate = useNavigate();
 
     return (<div className="h-screen flex items-center justify-center">
         {formOpened && (<Modal setModalOpen={setFormOpened}>
@@ -230,6 +232,7 @@ const Collections = () => {
                     <td>{collection.collectable.length}</td>
                     <td>
                         <div className="flex justify-center space-x-4">
+                            <Clipboard url={`${window.location.origin}/${collection.slug}`} label="Copier le lien" />
                             <button
                                 onClick={() => handleOpenForm(collection)}
                                 className="text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-2">
