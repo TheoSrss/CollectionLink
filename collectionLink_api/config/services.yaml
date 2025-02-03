@@ -27,3 +27,4 @@ services:
         App\Entity\User: 'App\State\UserPersister'
         App\Entity\Collectable: 'App\State\CollectablePersister'
         App\Entity\CollectionObject: 'App\State\CollectionPersister'
+        

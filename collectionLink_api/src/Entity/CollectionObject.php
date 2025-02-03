@@ -87,7 +87,8 @@ class CollectionObject
     /**
      * @var Collection<int, Collectable>
      */
-    #[ORM\ManyToMany(targetEntity: Collectable::class)]
+    // #[ORM\ManyToMany(targetEntity: Collectable::class)]
+    #[ORM\ManyToMany(targetEntity: Collectable::class, inversedBy: 'collections')]
     #[Assert\Valid()]
     #[Assert\Count(
         min: 1,

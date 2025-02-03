@@ -85,6 +85,13 @@ class Collectable
     #[MaxPicturesCount()]
     private Collection $pictures;
 
+    /**
+     * @var Collection<int, CollectionObject>
+     */
+    #[ORM\ManyToMany(targetEntity: CollectionObject::class, mappedBy: 'collectable')]
+    #[Groups(['collectable:read'])]
+    private Collection $collections;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
@@ -174,5 +181,9 @@ class Collectable
         }
 
         return $this;
+    }
+    public function getCollections(): Collection
+    {
+        return $this->collections;
     }
 }

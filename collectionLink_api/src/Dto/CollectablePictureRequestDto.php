@@ -10,7 +10,7 @@ readonly class CollectablePictureRequestDto
     #[Assert\All([
         new Assert\File(
             maxSize: '5M',
-            mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+            mimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
         )
     ])]
     public array $pictures;

@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use App\State\PictureProcessor;
 use App\Dto\CollectablePictureRequestDto;
-
+use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
 #[Vich\Uploadable]
@@ -22,7 +22,6 @@ use App\Dto\CollectablePictureRequestDto;
             uriTemplate: '/collectables/{id}/pictures',
             processor: PictureProcessor::class,
             input: CollectablePictureRequestDto::class,
-            // security: "object.getCollectable() !== null and object.getCollectable() === user",
             inputFormats: ['multipart' => ['multipart/form-data']]
         )
     ],
@@ -44,7 +43,6 @@ class Picture
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['collectable:read'])]
     private ?int $fileSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'pictures')]
@@ -110,8 +108,11 @@ class Picture
         return $this;
     }
 
-    // public function getUrl(): ?string
-    // {
-    //     return $this->filePath ? '/uploads/photos/' . $this->filePath : null;
-    // }
+    #[Groups(['collectable:read'])]
+    public function getUrl(): ?string
+    {
+        $filenameWithoutExtension = pathinfo($this->getName(), PATHINFO_FILENAME);
+
+        return '/pictures/' . $filenameWithoutExtension;
+    }
 }
