@@ -2,7 +2,7 @@
 
 namespace App\Validator\Constraints;
 
-use App\DTO\PasswordForgottenNewPasswordInput;
+use App\DTO\PasswordForgottenNewPasswordDto;
 use App\Repository\UserRepository;
 use App\Validator\Constraints\IsValidPasswordForgottenCode;
 use Symfony\Component\Validator\Constraint;
@@ -19,8 +19,8 @@ class IsValidPasswordForgottenCodeValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, IsValidPasswordForgottenCode::class);
         }
 
-        if (!$value instanceof PasswordForgottenNewPasswordInput) {
-            throw new UnexpectedTypeException($value, PasswordForgottenNewPasswordInput::class);
+        if (!$value instanceof PasswordForgottenNewPasswordDto) {
+            throw new UnexpectedTypeException($value, PasswordForgottenNewPasswordDto::class);
         }
         $user = $this->userRepository->findOneBy(['email' => $value->email]);
 

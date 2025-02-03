@@ -5,7 +5,7 @@ namespace App\Dto;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class PasswordForgottenRequestInput
+class PasswordForgottenRequestDto
 {
     #[Assert\NotBlank()]
     #[Assert\Email()]

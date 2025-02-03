@@ -7,8 +7,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\UserController;
-use App\Dto\PasswordForgottenNewPasswordInput;
-use App\Dto\PasswordForgottenRequestInput;
+use App\Dto\PasswordForgottenNewPasswordDto;
+use App\Dto\PasswordForgottenRequestDto;
 use App\Repository\UserRepository;
 use App\State\UserPersister;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,14 +55,14 @@ use App\State\PasswordForgottenRequestProcessor;
         new Post(
             uriTemplate: '/forgot-password',
             security: "is_granted('PUBLIC_ACCESS')",
-            input: PasswordForgottenRequestInput::class,
+            input: PasswordForgottenRequestDto::class,
             processor: PasswordForgottenRequestProcessor::class,
             denormalizationContext: ['groups' => ['user:forgot-password']],
         ),
         new Post(
             uriTemplate: '/reset-password',
             security: "is_granted('PUBLIC_ACCESS')",
-            input: PasswordForgottenNewPasswordInput::class,
+            input: PasswordForgottenNewPasswordDto::class,
             processor: PasswordForgottenNewPasswordProcessor::class,
             denormalizationContext: ['groups' => ['user:forgot-password']],
         ),

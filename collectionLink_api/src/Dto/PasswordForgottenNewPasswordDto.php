@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use App\Validator\Constraints\IsValidPasswordForgottenCode;
 
 #[IsValidPasswordForgottenCode()]
-class PasswordForgottenNewPasswordInput
+class PasswordForgottenNewPasswordDto
 {
     #[Assert\NotBlank()]
     #[Assert\Type('integer')]

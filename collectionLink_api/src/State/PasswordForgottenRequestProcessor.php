@@ -4,7 +4,7 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Dto\PasswordForgottenRequestInput;
+use App\Dto\PasswordForgottenRequestDto;
 use App\Repository\UserRepository;
 use App\Security\CodeService;
 use App\Security\PasswordResetService;
@@ -23,7 +23,7 @@ class PasswordForgottenRequestProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        if (!$data instanceof PasswordForgottenRequestInput) {
+        if (!$data instanceof PasswordForgottenRequestDto) {
             throw new \InvalidArgumentException('Invalid input.');
         }
         $user = $this->userRepository->findOneBy(['email' => $data->email]);
