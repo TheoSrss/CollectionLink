@@ -17,5 +17,5 @@
 ../.idea
 
 .DS_Store
-/public/images 
+/public/images/ 
 /composer.lock

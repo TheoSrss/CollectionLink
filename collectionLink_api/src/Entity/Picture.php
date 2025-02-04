@@ -108,7 +108,7 @@ class Picture
         return $this;
     }
 
-    #[Groups(['collectable:read'])]
+    #[Groups(['collectable:read', 'collection:read'])]
     public function getUrl(): ?string
     {
         $filenameWithoutExtension = pathinfo($this->getName(), PATHINFO_FILENAME);

@@ -80,7 +80,7 @@ class Collectable
      * @var Collection<int, Picture>
      */
     #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'collectable', orphanRemoval: true, cascade: ['persist', 'remove'])]
-    #[Groups(['collectable:read'])]
+    #[Groups(['collectable:read', 'collection:read'])]
     #[Assert\Valid]
     #[MaxPicturesCount()]
     private Collection $pictures;
