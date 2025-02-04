@@ -10,6 +10,7 @@ import FormWrapper from "../forms/FormWrapper";
 import TextInput from "../forms/TextInput";
 import Toggle from "../forms/Toggle";
 import {LetterText, Type} from "lucide-react";
+import { truncateText } from "../../utils/string";
 
 const Items = () => {
     const [items, setItems] = useState(null);
@@ -40,12 +41,6 @@ const Items = () => {
             setLoading(false);
         }
     }
-
-    const truncateDescription = (description) => {
-        if (!description) return '...';
-        return description.length > 50 ? `${description.slice(0, 50)}...` : description;
-    };
-
 
     // Delete logic
     const handleDelete = async () => {
@@ -176,7 +171,7 @@ const Items = () => {
                     <td>{item.name}</td>
                     <td>{formatDateTime(item.createdAt)}</td>
                     <td>
-                        {truncateDescription(item?.description)}
+                        {truncateText(item?.description,100)}
                     </td>
                     <td>
                         <div className="flex justify-center space-x-4">

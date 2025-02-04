@@ -1,4 +1,5 @@
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+export const API_BASE_URL = 'http://localhost:8000/api';
+export const BACKEND_URL = 'http://localhost:8000';
 export const TOKEN_KEY = 'auth_token';
 
 const ERROR_FORM_MESSAGES = {

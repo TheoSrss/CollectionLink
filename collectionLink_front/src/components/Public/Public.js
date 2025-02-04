@@ -4,6 +4,8 @@ import {NavLink, useParams} from "react-router-dom";
 import api from "../../services/api";
 import Password from "./Password";
 import ThemeToggle from "../ThemeToggle";
+import {useAuth} from "../../context/AuthContext";
+import PublicCard from "./PublicCard";
 
 const Public = () => {
     const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ const Public = () => {
     const [notFound, setNotFound] = useState(false);
     const [needPassword, setNeedPassword] = useState(false);
     const [password, setPassword] = useState(null);
-
+    const {user} = useAuth();
 
     useEffect(() => {
         fetchICollection()
@@ -20,11 +22,9 @@ const Public = () => {
 
 
     const fetchICollection = async () => {
-        console.log("Fetching collection...", password);
         try {
             const response = await api.get(`collections/public/${slug}${password ? `?password=${password}` : ''}`);
             if (response.ok) {
-                console.log('ok')
                 const data = await response.json();
                 setCollection(data);
                 setNeedPassword(false);
@@ -62,7 +62,9 @@ const Public = () => {
             {/*    /!*</div>*!/*/}
             {/*</div>*/}
             <div className="flex justify-center ">
-                <div className="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                <div
+                    className="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 flex flex-col">
+
                     {/*<svg className="absolute w-30 h-24 text-gray-400 -left-1" fill="currentColor"*/}
                     {/*     viewBox="0 0 20 20"*/}
                     {/*     xmlns="http://www.w3.org/2000/svg">*/}
@@ -71,19 +73,22 @@ const Public = () => {
                     {/*</svg>*/}
                 </div>
             </div>
-
             <h1 className="text-xl font-bold mt-4">@{collection.user.username}</h1>
             <p className="text-gray-500 text-sm">DESCRIPTION DE MON COMPTE</p>
         </div>
-        <NavLink to='/register'>
+        <div className="flex flex-wrap justify-center gap-6 mt-12 px-4">
+            {collection.collectable.map((c) => (<PublicCard key={c.id} collectable={c}/>))}
+        </div>
+
+        {!user && (<NavLink to='/registration'>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
                 <button type="submit"
                         className="relative w-full text-[#FFFFFF] bg-violet-500 dark:bg-violet-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">
-                    Rejoins {collection.user.username} sur CollectionLinksur CollectionLinksur CollectionLinksur
+                    Rejoins {collection.user.username} sur CollectionLinksur
                     CollectionLink
                 </button>
             </div>
-        </NavLink>
+        </NavLink>)}
     </div>);
 
 };
