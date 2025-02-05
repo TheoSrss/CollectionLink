@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import {NavLink, useLocation} from "react-router-dom";
-import {CircleUser, LibraryBig,ListChecks} from 'lucide-react';
+import {CircleUser, LibraryBig, ListChecks} from 'lucide-react';
 import Logo from '../assets/svg/logo.svg'
+
 function Sidebar({
                      sidebarOpen, setSidebarOpen, variant = 'default',
                  }) {
@@ -86,10 +87,6 @@ function Sidebar({
                     {/* Pages group */}
                     <div>
                         <h3 className="text-xs uppercase text-gray-400 dark:text-gray-500 font-semibold pl-3">
-              <span className="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
-                    aria-hidden="true">
-                •••
-              </span>
                         </h3>
                         <ul className="mt-3">
                             {/* Messages */}
@@ -100,28 +97,29 @@ function Sidebar({
                                             <CircleUser/> <span
                                             className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mon compte</span>
                                         </div>
-                                        <div className="flex flex-shrink-0 ml-2">
-                                            <span
-                                                className="inline-flex items-center justify-center h-5 text-xs font-medium text-white bg-violet-400 px-2 rounded">4</span>
-                                        </div>
                                     </div>
                                 </NavLink>
                             </li>
                             <li className={`pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${pathname.includes("inbox") && "from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]"}`}>
                                 <NavLink to="/collections">
-                                    <div className="flex items-center">
-                                        <LibraryBig/>
-                                        <span
-                                            className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mes collections</span>
+                                    <div className="flex items-center justify-between">
+                                        <div className="grow flex items-center">
+                                            <LibraryBig/>
+                                            <span
+                                                className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mes collections</span>
+                                        </div>
                                     </div>
                                 </NavLink>
                             </li>
                             <li className={`pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] ${pathname.includes("inbox") && "from-violet-500/[0.12] dark:from-violet-500/[0.24] to-violet-500/[0.04]"}`}>
                                 <NavLink to="/items">
                                     <div className="flex items-center">
-                                        <ListChecks/>
-                                        <span
-                                            className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mes items</span>
+                                        <div className="grow flex items-center">
+
+                                            <ListChecks/>
+                                            <span
+                                                className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mes items</span>
+                                        </div>
                                     </div>
                                 </NavLink>
                             </li>
