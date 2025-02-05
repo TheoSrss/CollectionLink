@@ -8,9 +8,9 @@ import Modal from "../Modal";
 import useForm from "../../hooks/useForm";
 import FormWrapper from "../forms/FormWrapper";
 import TextInput from "../forms/TextInput";
-import Toggle from "../forms/Toggle";
+import File from "../forms/File";
 import {LetterText, Type} from "lucide-react";
-import { truncateText } from "../../utils/string";
+import {truncateText} from "../../utils/string";
 
 const Items = () => {
     const [items, setItems] = useState(null);
@@ -18,13 +18,13 @@ const Items = () => {
     const {user} = useAuth();
     const [itemToDelete, setItemToDelete] = useState(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [itemEdited, setItemEdited] = useState({
-        name: '', description: '', collectable: []
-    });
     const [formOpened, setFormOpened] = useState(false);
     const [formError, setFormError] = useState(false);
+    const defaultItem = {
+        name: "", description: "", pictures: []
+    };
 
-    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(itemEdited);
+    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(defaultItem);
 
     useEffect(() => {
         fetchItemsData();
@@ -44,6 +44,7 @@ const Items = () => {
 
     // Delete logic
     const handleDelete = async () => {
+        if (!itemToDelete) return;
         try {
             const res = await api.delete(itemToDelete.replace('/api/', ''));
             if (res.ok) {
@@ -60,15 +61,9 @@ const Items = () => {
         setDeleteModalOpen(true);
     };
 
-
-    const handleOpenForm = async (item = null) => {
-        if (item === null) {
-            item = {
-                name: '', description: '', public: []
-            }
-        }
+    const handleOpenForm = (item = null) => {
         handleApiErrors([]);
-        setValues(item);
+        setValues(item ?? defaultItem);
         setFormOpened(true);
         setFormError(false);
     };
@@ -78,12 +73,31 @@ const Items = () => {
             let endpoint = formData['@id'] ?? 'collectables';
             let apiMethod = formData['@id'] ? api.patch : api.post;
             let payload = {
-                name: formData.name, description: formData.description, public: !!formData.public,
+                name: formData.name,
+                description: formData.description,
             };
-            const res = await apiMethod(endpoint.replace('/api/', ''), {json: payload});
+
+            const res = await apiMethod(endpoint.replace('/api/', ''), { json: payload });
+
             if (res.ok) {
-                setFormOpened(false);
-                await fetchItemsData();
+                const data = await res.json();
+                if (formData.pictures && formData.pictures.length > 0) {
+                    const picturesEndpoint = `${data['@id']}/pictures`;
+                    const picturesFormData = new FormData();
+
+                    formData.pictures.forEach((file) => {
+                        picturesFormData.append('pictures[]', file);
+                    });
+
+                    const resPictures = await api.post(picturesEndpoint.replace('/api/', ''), {
+                        body: picturesFormData
+                    });
+
+                    if (resPictures.ok) {
+                        setFormOpened(false);
+                        await fetchItemsData();
+                    }
+                }
             }
         } catch (error) {
             if (error.response && error.response.status === 422) {
@@ -121,12 +135,12 @@ const Items = () => {
                     error={errors.description}
                     textarea={true}
                 />
-                <Toggle
-                    name="public"
-                    label="Public"
-                    value={values.public ?? false}
+                <File
+                    name="pictures"
+                    label="Photos"
+                    value={values.pictures}
                     onChange={handleChange}
-                    error={errors.public}
+                    error={errors.pictures}
                 />
                 <button type="submit"
                         className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">
@@ -171,7 +185,7 @@ const Items = () => {
                     <td>{item.name}</td>
                     <td>{formatDateTime(item.createdAt)}</td>
                     <td>
-                        {truncateText(item?.description,100)}
+                        {truncateText(item?.description, 100)}
                     </td>
                     <td>
                         <div className="flex justify-center space-x-4">

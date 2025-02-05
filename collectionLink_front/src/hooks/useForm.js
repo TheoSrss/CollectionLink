@@ -9,14 +9,16 @@ const useForm = (initialState) => {
         setValues(newValues);
     };
     const handleChange = (e) => {
-        const {name, value, type, checked} = e.target;
-        setValues({...values, [name]: type === 'checkbox' ? checked : value,});
+        const { name, value, type, checked, files } = e.target;
+        if (Array.isArray(values[name])) {
+            setValues({ ...values, [name]: files ? Array.from(files) : [] });
+        } else {
+            setValues({ ...values, [name]: type === "checkbox" ? checked : value });
+        }
     };
 
     const handleSubmit = (onSubmit) => (e) => {
         e.preventDefault();
-        // const validationErrors = validate(values);
-        // setErrors(validationErrors);
         onSubmit(values);
     };
 
