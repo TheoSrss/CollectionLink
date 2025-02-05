@@ -44,7 +44,7 @@ final readonly class UserPersister implements ProcessorInterface
         if (!in_array(User::ROLE_USER, $data->getRoles())) {
             $verificationCode = $this->codeService->generateNewCode();
             $data->setVerificationCode($verificationCode);
-            $this->mailer->sendValidationCode($data->getEmail(), $verificationCode);
+            $this->mailer->sendValidationCode($data, $verificationCode);
         }
 
         return $this->processor->process($data, $operation, $uriVariables, $context);

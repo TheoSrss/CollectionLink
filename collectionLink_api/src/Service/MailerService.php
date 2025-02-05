@@ -5,37 +5,46 @@ namespace App\Service;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Entity\User;
+use Twig\Environment;
 
 class MailerService
 {
-    public function __construct(private MailerInterface $mailer) {}
+    public function __construct(
+        private MailerInterface $mailer,
+        private Environment $twig
+    ) {}
 
     private static array $fromEmails = [
         'default' => 'hi@demomailtrap.com',
         'noreply' => 'noreply@collectionlink.com',
     ];
 
-    private function sendEmail(string $to, string $subject, string $text, string $from = 'default'): void
+    private function sendEmail(string $to, string $subject, $templatePath, $templateParams, string $from = 'default'): void
     {
         if (!isset(self::$fromEmails[$from])) {
             throw new \InvalidArgumentException("Erreur envoie email");
         }
 
+        $mjmlContent = $this->twig->render('email/' . $templatePath, $templateParams);
+        $htmlContent = $this->twig->createTemplate('{{ mjmlContent|mjml }}')->render(['mjmlContent' => $mjmlContent]);
+
+
         $email = (new Email())
             ->from(self::$fromEmails[$from])
             ->to($to)
             ->subject($subject)
-            ->text($text);
+            ->html($htmlContent);
 
         $this->mailer->send($email);
     }
 
-    public function sendValidationCode(string $email, string $verificationCode): void
+    public function sendValidationCode(User $user, string $verificationCode): void
     {
         $this->sendEmail(
-            $email,
+            $user->getEmail(),
             'Bienvenue sur CollectionLink! Votre code de validation',
-            "Bonjour,\n\nVotre code de validation est: $verificationCode\n\nBienvenue sur CollectionLink!"
+            'welcome.mjml.twig',
+            ['code' => $verificationCode, "username" => $user->getUsername()]
         );
     }
 
@@ -44,7 +53,8 @@ class MailerService
         $this->sendEmail(
             $user->getEmail(),
             'Réinitialisation de votre mot de passe',
-            "Bonjour,\n\nPour réinitialiser votre mot de passe, veuillez utiliser le code suivant: $code \n\nMerci de prendre en compte seulement le dernier code reçu.",
+            'resetPassword.mjml.twig',
+            ['code' => $code]
         );
     }
 }
