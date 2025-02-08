@@ -6,6 +6,7 @@ import Password from "./Password";
 import ThemeToggle from "../ThemeToggle";
 import {useAuth} from "../../context/AuthContext";
 import PublicCard from "./PublicCard";
+import avatar from "../../assets/avatar.png";
 
 const Public = () => {
     const [loading, setLoading] = useState(true);
@@ -50,42 +51,23 @@ const Public = () => {
             <ThemeToggle/>
         </div>
         <div className="text-center mt-16">
-            {/* Profile Image */}
-            {/*/!*<div className="w-24 h-24 mx-auto rounded-full overflow-hidden">*!/*/}
-            {/*<div*/}
-            {/*    className="flex justify-center relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">*/}
-            {/*    <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor"*/}
-            {/*         viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">*/}
-            {/*        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"*/}
-            {/*              clip-rule="evenodd"></path>*/}
-            {/*    </svg>*/}
-            {/*    /!*</div>*!/*/}
-            {/*</div>*/}
             <div className="flex justify-center ">
                 <div
-                    className="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 flex flex-col">
-
-                    {/*<svg className="absolute w-30 h-24 text-gray-400 -left-1" fill="currentColor"*/}
-                    {/*     viewBox="0 0 20 20"*/}
-                    {/*     xmlns="http://www.w3.org/2000/svg">*/}
-                    {/*    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"*/}
-                    {/*          clip-rule="evenodd"></path>*/}
-                    {/*</svg>*/}
+                    className="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-300 flex flex-col">
+                    <img src={avatar} alt="Avatar"/>
                 </div>
             </div>
             <h1 className="text-xl font-bold mt-4">@{collection.user.username}</h1>
-            <p className="text-gray-500 text-sm">DESCRIPTION DE MON COMPTE</p>
+            {/*<p className="text-gray-500 text-sm">DESCRIPTION DE MON COMPTE</p>*/}
         </div>
         <div className="flex flex-wrap justify-center gap-6 mt-12 px-4">
             {collection.collectable.map((c) => (<PublicCard key={c.id} collectable={c}/>))}
         </div>
-
         {!user && (<NavLink to='/registration'>
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
                 <button type="submit"
                         className="relative w-full text-[#FFFFFF] bg-violet-500 dark:bg-violet-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">
-                    Rejoins {collection.user.username} sur CollectionLinksur
-                    CollectionLink
+                    Rejoins {collection.user.username} sur CollectionLink
                 </button>
             </div>
         </NavLink>)}

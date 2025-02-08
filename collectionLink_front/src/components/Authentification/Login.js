@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import FormWrapper from "../forms/FormWrapper";
 import TextInput from "../forms/TextInput";
 import useForm from "../../hooks/useForm";
-import logo from "../../assets/svg/logo.svg";
+import logo from "../../assets/svg/logo.png";
 import {Navigate, NavLink} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext";
 import {KeySquare, Mail} from "lucide-react";

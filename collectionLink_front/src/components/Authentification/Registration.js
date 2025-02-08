@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import FormWrapper from "../forms/FormWrapper";
 import useForm from "../../hooks/useForm";
-import logo from "../../assets/svg/logo.svg";
+import logo from "../../assets/svg/logo.png";
 import {NavLink} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext";
 import TextInput from "../forms/TextInput";

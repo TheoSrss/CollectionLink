@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {NavLink, useLocation} from "react-router-dom";
 import {CircleUser, LibraryBig, ListChecks} from 'lucide-react';
-import Logo from '../assets/svg/logo.svg'
+import Logo from '../assets/svg/logo.png'
 
 function Sidebar({
                      sidebarOpen, setSidebarOpen, variant = 'default',
@@ -76,8 +76,8 @@ function Sidebar({
                     </button>
                     {/* Logo */}
                     <NavLink end to="/" className="block">
-                        <div className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-md flex gap-2	">
-                            <img src={Logo} alt="" className='max-w-5'/>
+                        <div className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-md flex gap-2 items-center	">
+                            <img src={Logo} alt="" className='h-5'/>
                             <h1 className="text-2xl font-bold dark:text-gray-100 hidden 2xl:block">CollectionLink</h1>
                         </div>
                     </NavLink>

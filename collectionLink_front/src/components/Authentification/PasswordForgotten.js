@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import logo from "../../assets/svg/logo.svg";
+import logo from "../../assets/svg/logo.png";
 import {NavLink} from "react-router-dom";
 import {ArrowBigLeft, Mail} from "lucide-react";
 import FormWrapper from "../forms/FormWrapper";
