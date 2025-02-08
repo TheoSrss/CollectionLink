@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Collectable;
 use App\Entity\CollectionObject;
+use App\Entity\Picture;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -19,8 +20,8 @@ class DashboardController extends AbstractDashboardController
     #[IsGranted('ROLE_ADMIN')]
     public function index(): Response
     {
-         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-         return $this->redirect($adminUrlGenerator->setController(CollectableCrudController::class)->generateUrl());
+        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        return $this->redirect($adminUrlGenerator->setController(CollectableCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
@@ -34,6 +35,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Users', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Collectales', 'fa fa-file', Collectable::class);
         yield MenuItem::linkToCrud('Collections', 'fa fa-folder', CollectionObject::class);
+        yield MenuItem::linkToCrud('Pictures', 'fa fa-image', Picture::class);
+
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
