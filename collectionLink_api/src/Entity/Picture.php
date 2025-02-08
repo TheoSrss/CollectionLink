@@ -12,7 +12,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use App\State\PictureProcessor;
 use App\Dto\CollectablePictureRequestDto;
-use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
 #[Vich\Uploadable]
@@ -20,9 +19,18 @@ use ApiPlatform\Metadata\Get;
     operations: [
         new Post(
             uriTemplate: '/collectables/{id}/pictures',
+            name: 'pictures_upload',
             processor: PictureProcessor::class,
             input: CollectablePictureRequestDto::class,
             inputFormats: ['multipart' => ['multipart/form-data']]
+        ),
+        new Post(
+            // uri not RESTful because DELETE is not working
+            uriTemplate: '/collectables/{id}/pictures/delete',
+            name: 'pictures_delete',
+            processor: PictureProcessor::class,
+            input: CollectablePictureRequestDto::class,
+            inputFormats: ['json' => ['application/json']]
         )
     ],
 )]
@@ -77,7 +85,7 @@ class Picture
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 

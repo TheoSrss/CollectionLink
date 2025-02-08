@@ -11,6 +11,7 @@ use App\Entity\Picture;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use ApiPlatform\Validator\Exception\ValidationException;
+use App\Dto\CollectablePictureRequestDto;
 
 final readonly class PictureProcessor implements ProcessorInterface
 {
@@ -31,7 +32,22 @@ final readonly class PictureProcessor implements ProcessorInterface
             throw new \Exception('Access denied');
         }
 
-        foreach ($data->pictures as $file) {
+        if ($operation->getName() === 'pictures_upload') {
+            return $this->uploadPictures($data, $collectable);
+        }
+
+        if ($operation->getName() === 'pictures_delete') {
+            return $this->deletePictures($data, $collectable);
+        }
+
+        return new JsonResponse([
+            'Not found'
+        ], 404);
+    }
+
+    private function uploadPictures(CollectablePictureRequestDto $pictureDto, Collectable $collectable): JsonResponse
+    {
+        foreach ($pictureDto->pictures as $file) {
             $picture = new Picture();
             $picture->setFile($file);
             $collectable->addPicture($picture);
@@ -48,6 +64,26 @@ final readonly class PictureProcessor implements ProcessorInterface
 
         return new JsonResponse([
             'message' => 'Pictures uploaded',
+        ], 200);
+    }
+
+    private function deletePictures(CollectablePictureRequestDto $pictureDto, Collectable $collectable): JsonResponse
+    {
+        foreach ($pictureDto->picturesIdsToDelete as $pictureId) {
+            $picture = $collectable->getPictures()->filter(function (Picture $p) use ($pictureId) {
+                return $p->getId() === $pictureId;
+            })->first();
+
+            if ($picture) {
+                $collectable->removePicture($picture);
+                $this->entityManager->remove($picture);
+            }
+        }
+
+        $this->entityManager->flush();
+
+        return new JsonResponse([
+            'message' => 'Pictures deleted',
         ], 200);
     }
 }

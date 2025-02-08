@@ -15,8 +15,14 @@ readonly class CollectablePictureRequestDto
     ])]
     public array $pictures;
 
-    public function __construct(array $pictures = [])
+    #[Assert\All([
+        new Assert\Type('integer')
+    ])]
+    public array $picturesIdsToDelete;
+
+    public function __construct(array $pictures = [], array $picturesIdsToDelete = [])
     {
         $this->pictures = $pictures;
+        $this->picturesIdsToDelete = $picturesIdsToDelete;
     }
 }
