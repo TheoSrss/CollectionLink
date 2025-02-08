@@ -58,7 +58,8 @@ const Public = () => {
                 </div>
             </div>
             <h1 className="text-xl font-bold mt-4">@{collection.user.username}</h1>
-            {/*<p className="text-gray-500 text-sm">DESCRIPTION DE MON COMPTE</p>*/}
+            <p className="text-gray-800 dark:text-gray-300 text-xl">{collection.name}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">{collection.description}</p>
         </div>
         <div className="flex flex-wrap justify-center gap-6 mt-12 px-4">
             {collection.collectable.map((c) => (<PublicCard key={c.id} collectable={c}/>))}
