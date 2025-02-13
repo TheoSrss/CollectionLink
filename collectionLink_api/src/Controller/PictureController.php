@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\PictureRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PictureController extends GeneralController
 {
@@ -26,20 +28,27 @@ class PictureController extends GeneralController
 
         $collectable = $picture->getCollectable();
 
-        if (count($collectable->getCollections()) === 0) {
+        if (!$collectable) {
             throw new NotFoundHttpException('Picture not found');
         }
-        $publicAccess = false;
-        foreach ($collectable->getCollections() as $collection) {
-            if (!$collection->isPrivate()) {
-                $publicAccess = true;
+        $user = $this->getUser();
+        if ($user !== $collectable->getCreator()) {
+            // dd($collectable, $user);
+            if (count($collectable->getCollections()) === 0) {
+                throw new NotFoundHttpException('Picture not found');
             }
-        }
+            $publicAccess = false;
+            foreach ($collectable->getCollections() as $collection) {
+                if (!$collection->isPrivate()) {
+                    $publicAccess = true;
+                }
+            }
 
-        if (!$publicAccess) {
-            $password = $request->get('password');
-            if (!$collection->isPasswordValid($password)) {
-                throw new AccessDeniedHttpException('Invalid password');
+            if (!$publicAccess) {
+                $password = $request->get('password');
+                if (!$collection->isPasswordValid($password)) {
+                    throw new AccessDeniedHttpException('Invalid password');
+                }
             }
         }
 
