@@ -1,17 +1,35 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Label} from "flowbite-react";
 import {getErrorMessage} from "../../constants";
 
-const File = ({name, label, error, onChange}) => {
+const File = ({name, label, error, onChange, value, max = 1}) => {
     const [previews, setPreviews] = useState([]);
     const errorMessage = getErrorMessage(error);
 
+    useEffect(() => {
+        if (value && Array.isArray(value)) {
+            setPreviews(value);
+        }
+    }, [value]);
+
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-        const previewUrls = files.map((file) => URL.createObjectURL(file));
-        setPreviews(previewUrls);
+        const limit = max - previews.length;
+        const newFiles = files.slice(0, limit);
+        const newPreviews = newFiles.map(file => ({
+            url: URL.createObjectURL(file), file: file
+        }));
+        setPreviews(prev => {
+            const updatedPreviews = [...prev, ...newPreviews];
+            onChange({name, value: updatedPreviews}); // Met à jour avec la bonne valeur
+            return updatedPreviews;
+        });
+    };
 
-        onChange({target: {name, type: "file", files}});
+    const removePreview = (indexToRemove) => {
+        const newPreviews = previews.filter((_, index) => index !== indexToRemove);
+        setPreviews(newPreviews);
+        onChange({name: name, value: newPreviews});
     };
 
     return (<div className="my-6">
@@ -52,14 +70,24 @@ const File = ({name, label, error, onChange}) => {
             </Label>
         </div>
         {error && <span className="text-sm text-red-600 dark:text-red-500">{errorMessage}</span>}
-        {previews.length > 0 && (<div className="mt-4 flex flex-wrap gap-2">
-            {previews.map((src, index) => (<img
-                key={index}
-                src={src}
-                alt={`preview-${index}`}
-                className="w-32 h-32 object-cover rounded-lg shadow"
-            />))}
-        </div>)}
+        <div className="mt-4 flex flex-wrap gap-2">
+            {previews.map((preview, index) => (<div key={index} className="relative">
+                    <img
+                        src={preview.url}
+                        alt={`preview-${index}`}
+                        className="w-32 h-32 object-cover rounded-lg shadow"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => removePreview(index)}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                    >
+                        ×
+                    </button>
+                </div>
+
+            ))}
+        </div>
     </div>);
 };
 

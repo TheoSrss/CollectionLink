@@ -17,7 +17,7 @@ const Profile = () => {
     // };
 
     const initialValues = {email: '', username: ''};
-    const {values, errors, handleChange, handleSubmit, setValues, handleApiErrors} = useForm(initialValues);
+    const {values, errors, handleChange, handleSubmit, updateValues, handleApiErrors} = useForm(initialValues);
 
     useEffect(() => {
         async function fetchUserData() {
@@ -25,7 +25,7 @@ const Profile = () => {
                 const response = await api.get('profile');
                 const data = await response.json();
                 setUser(data);
-                setValues(data);
+                updateValues(data);
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
@@ -33,7 +33,7 @@ const Profile = () => {
         }
 
         fetchUserData();
-    }, [setValues]);
+    }, [updateValues]);
 
     const onSubmit = async (formData) => {
         setFormError(false);

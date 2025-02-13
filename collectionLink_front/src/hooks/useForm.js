@@ -2,18 +2,20 @@ import {useState} from 'react';
 
 const useForm = (initialState) => {
     const [values, setValues] = useState(initialState);
+    const [defaultValues, setDefaultValues] = useState(initialState);
     const [errors, setErrors] = useState({});
-
 
     const updateValues = (newValues) => {
         setValues(newValues);
+        setDefaultValues(newValues);
     };
     const handleChange = (e) => {
-        const { name, value, type, checked, files } = e.target;
-        if (Array.isArray(values[name])) {
-            setValues({ ...values, [name]: files ? Array.from(files) : [] });
+        if (!e.target) {
+            // @TODO ajouter cette logique pour  les collectables dans le form collections
+            setValues({...values, [e.name]: e.value});
         } else {
-            setValues({ ...values, [name]: type === "checkbox" ? checked : value });
+            const {name, value, type, checked} = e.target;
+            setValues({...values, [name]: type === "checkbox" ? checked : value});
         }
     };
 
@@ -30,7 +32,7 @@ const useForm = (initialState) => {
         setErrors(newErrors);
     };
 
-    return {values, errors, handleChange, handleSubmit, setValues, updateValues, handleApiErrors};
+    return {values, errors, handleChange, handleSubmit, setValues, updateValues, handleApiErrors,defaultValues};
 };
 
 export default useForm;

@@ -24,7 +24,9 @@ const Items = () => {
         name: "", description: "", pictures: []
     };
 
-    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(defaultItem);
+    const {
+        handleChange, handleSubmit, values, updateValues, handleApiErrors, errors, defaultValues
+    } = useForm(defaultItem);
 
     useEffect(() => {
         fetchItemsData();
@@ -63,41 +65,55 @@ const Items = () => {
 
     const handleOpenForm = (item = null) => {
         handleApiErrors([]);
-        setValues(item ?? defaultItem);
+        updateValues(item ?? defaultItem);
         setFormOpened(true);
         setFormError(false);
     };
 
     const onSubmit = async (formData) => {
+
         try {
             let endpoint = formData['@id'] ?? 'collectables';
             let apiMethod = formData['@id'] ? api.patch : api.post;
             let payload = {
-                name: formData.name,
-                description: formData.description,
+                name: formData.name, description: formData.description,
             };
 
-            const res = await apiMethod(endpoint.replace('/api/', ''), { json: payload });
+            const res = await apiMethod(endpoint.replace('/api/', ''), {json: payload});
+            let filesToAdd = [];
+            let filesToDelete = [];
+            let resPicturesDelete = null;
+            let resPicturesAdd = null;
 
             if (res.ok) {
-                const data = await res.json();
-                if (formData.pictures && formData.pictures.length > 0) {
-                    const picturesEndpoint = `${data['@id']}/pictures`;
-                    const picturesFormData = new FormData();
+                let data = await res.json();
+                const idPictures = data['@id'].replace('/api/', '');
+                const filesList = formData.pictures;
+                filesToDelete = defaultValues.pictures.filter(file => file['@id'] && !filesList.some(f => f['@id'] === file['@id']));
+                filesToAdd = filesList.filter((file) => !file['@id']);
 
-                    formData.pictures.forEach((file) => {
-                        picturesFormData.append('pictures[]', file);
+                if (filesToDelete.length > 0) {
+                    resPicturesDelete = await api.post(`${idPictures}/pictures/delete`, {
+                        json: {
+                            'picturesIdsToDelete': filesToDelete.map(file => Number(file['@id'].split('/').pop())),
+                        }
                     });
-
-                    const resPictures = await api.post(picturesEndpoint.replace('/api/', ''), {
-                        body: picturesFormData
-                    });
-
-                    if (resPictures.ok) {
-                        setFormOpened(false);
-                        await fetchItemsData();
-                    }
                 }
+
+                if (filesToAdd.length > 0) {
+                    const picturesFormData = new FormData();
+                    filesToAdd.forEach((file) => {
+                        picturesFormData.append('pictures[]', file.file);
+                    });
+                    resPicturesAdd = await api.post(`${idPictures}/pictures`, {
+                        body: picturesFormData,
+                    });
+                }
+            }
+
+            if (res.ok && (filesToDelete.length === 0 || resPicturesDelete?.ok) && (filesToAdd.length === 0 || resPicturesAdd?.ok)) {
+                setFormOpened(false);
+                await fetchItemsData();
             }
         } catch (error) {
             if (error.response && error.response.status === 422) {
@@ -137,10 +153,11 @@ const Items = () => {
                 />
                 <File
                     name="pictures"
-                    label="Photos"
+                    label="Photos (5 maximum)"
                     value={values.pictures}
                     onChange={handleChange}
                     error={errors.pictures}
+                    max={5}
                 />
                 <button type="submit"
                         className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">

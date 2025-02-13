@@ -29,7 +29,7 @@ const Collections = () => {
     const [formError, setFormError] = useState(false);
     const [passwordExist, setPasswordExist] = useState(false);
 
-    const {handleChange, handleSubmit, values, setValues, handleApiErrors, errors} = useForm(defaultCollection);
+    const {handleChange, handleSubmit, values, updateValues, handleApiErrors, errors} = useForm(defaultCollection);
     // Modal logic
     useEffect(() => {
         if (user) {
@@ -69,7 +69,7 @@ const Collections = () => {
         }
         handleApiErrors([]);
         setPasswordExist(collection.private);
-        setValues(collection);
+        updateValues(collection);
         setSelectedItems(collection.collectable);
         setFormOpened(true);
         setFormError(false);
