@@ -27,7 +27,6 @@ class CollectionObjectTest extends BaseKernelTestCase
     public function testInvalidName(string $invalidName, int $totalErrors): void
     {
         $collection = EntityFactory::createCollectionObject();
-
         $collection->setName($invalidName);
 
         $this->assertValidationErrors($collection, $totalErrors);
