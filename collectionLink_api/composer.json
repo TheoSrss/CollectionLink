@@ -1,4 +1,6 @@
 {
+    "name": "collectionlink/api",
+    "description": "CollectionLink API - A platform for managing collections",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
