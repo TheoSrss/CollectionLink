@@ -1,0 +1,6 @@
+App\Entity\User:
+  user1:
+    username: 'user1'
+    email: 'test@gmail.com'
+    roles: ['ROLE_USER']
+    password: '$2y$13$salzPe/C/HXZU50L/v/e0eS9Jnp5BBVwxOXxjYc7zop/NNh0frp4i' # hashé

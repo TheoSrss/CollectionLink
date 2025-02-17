@@ -117,6 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: CollectionObject::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $collection;
+
     #[ORM\Column(type: 'json')]
     #[Groups(['user:read'])]
     private array $roles = [];
