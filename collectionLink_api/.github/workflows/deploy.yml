@@ -1,4 +1,4 @@
-name: CI/CD Symfony API
+name: CI/CD Collectionlink
 
 on:
   push:
