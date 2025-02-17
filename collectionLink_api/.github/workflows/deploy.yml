@@ -1,0 +1,73 @@
+name: CI/CD Symfony API
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  symfony:
+    name: 🧪 Collectionlink
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Install PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo, pdo_mysql, intl
+          coverage: none
+
+      - name: ✅ Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: 📦 Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Generate SSL Key for JWT
+        run: php bin/console lexik:jwt:generate-keypair
+
+      - name: Migrate database 
+        run: php bin/console d:m:m --no-interaction --env=test
+
+      - name: ✅ PHPUnit tests
+        run: php bin/phpunit --coverage-text
+
+  deploy:
+    name: 🚀 Déploiement Symfony
+    runs-on: ubuntu-latest
+    needs: symfony
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 📥 Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Se connecter au serveur et déployer
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/collectionlink
+            git fetch --all
+            git reset --hard origin/main
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php bin/console doctrine:migrations:migrate --no-interaction
+            php bin/console cache:clear
+            chmod -R 777 var/
+            sudo systemctl restart apache2
+
