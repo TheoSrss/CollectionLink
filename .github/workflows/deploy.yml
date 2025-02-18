@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: collectionlink  # ✅ Appliqué à tous les `run:`
+        working-directory: collectionLink_api  # ✅ Dossier correct sur GitHub
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4  # ❌ Pas de `working-directory` ici
+        uses: actions/checkout@v4
 
       - name: ⚙️ Install PHP and Composer
         uses: shivammathur/setup-php@v2
@@ -25,14 +25,14 @@ jobs:
           coverage: none
 
       - name: ✅ Validate composer.json and composer.lock
-        run: composer validate  # ✅ `working-directory` appliqué via `defaults:`
+        run: composer validate
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v3  # ❌ Pas de `working-directory` ici
+        uses: actions/cache@v3
         with:
-          path: collectionlink/vendor  # ✅ On indique directement le bon chemin
-          key: ${{ runner.os }}-php-${{ hashFiles('collectionlink/composer.lock') }}
+          path: collectionLink_api/vendor  # ✅ Chemin correct pour GitHub
+          key: ${{ runner.os }}-php-${{ hashFiles('collectionLink_api/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
 
@@ -55,9 +55,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: 📥 Récupérer le code
-        uses: actions/checkout@v4  # ❌ Pas de `working-directory` ici
-
       - name: 🔑 Se connecter au serveur et déployer
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -65,7 +62,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/collectionlink
+            cd /var/www/collectionlink  # ✅ Chemin correct sur le serveur
             git fetch --all
             git reset --hard origin/main
             composer install --no-interaction --prefer-dist --optimize-autoloader
