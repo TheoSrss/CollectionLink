@@ -7,7 +7,7 @@ on:
 
 jobs:
   symfony:
-    name: 🧪 Collectionlink
+    name: 🧪 Test Collectionlink
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -49,7 +49,7 @@ jobs:
       - name: ✅ Validate composer.json and composer.lock
         run: composer validate
 
-      - name: Cache Composer packages
+      - name: ✅ Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
         with:
@@ -61,10 +61,10 @@ jobs:
       - name: 📦 Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Create JWT directory
+      - name: 📦 Create JWT directory
         run: mkdir -p config/jwt
 
-      - name: Generate SSL Key for JWT
+      - name: 🔑 Generate SSL Key for JWT
         run: php bin/console lexik:jwt:generate-keypair
 
       # - name: 🛠️ Create database schema
@@ -77,20 +77,22 @@ jobs:
       #   run: php bin/phpunit --coverage-text
 
   deploy:
-    name: 🚀 Déploiement Symfony
+    name: 🚀 Deploy Collectionlink 
     runs-on: ubuntu-latest
     needs: symfony
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: 🔑 Se connecter au serveur et déployer
+      - name: 🔑 Connect to server and deploy
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          # key: ${{ secrets.SERVER_SSH_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          debug: true 
           script: |
-            cd /var/www/collectionlink  # ✅ Chemin correct sur le serveur
+            cd /var/www/collectionlink  
             git fetch --all
             git reset --hard origin/main
             composer install --no-interaction --prefer-dist --optimize-autoloader
