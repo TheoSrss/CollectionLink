@@ -26,6 +26,7 @@ abstract class BaseKernelTestCase extends KernelTestCase
         foreach ($errors as $error) {
             $messages[] = $error->getPropertyPath() . ' => ' . $error->getMessage();
         }
+
         $this->assertCount($expectedErrors, $errors);
     }
 }
