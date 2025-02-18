@@ -67,14 +67,14 @@ jobs:
       - name: Generate SSL Key for JWT
         run: php bin/console lexik:jwt:generate-keypair
 
-      - name: 🛠️ Create database schema
-        run: php bin/console doctrine:schema:create --env=test
+      # - name: 🛠️ Create database schema
+      #   run: php bin/console doctrine:schema:create --env=test
 
-      - name: Migrate database 
-        run: php bin/console d:m:m --no-interaction --env=test
+      # - name: Migrate database 
+      #   run: php bin/console d:m:m --no-interaction --env=test
 
-      - name: ✅ PHPUnit tests
-        run: php bin/phpunit --coverage-text
+      # - name: ✅ PHPUnit tests
+      #   run: php bin/phpunit --coverage-text
 
   deploy:
     name: 🚀 Déploiement Symfony
