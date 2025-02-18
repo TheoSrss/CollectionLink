@@ -9,24 +9,22 @@ jobs:
   symfony:
     name: 🧪 Collectionlink
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./collectionlink
 
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        working-directory: collectionlink_api
-
+      
       - name: ⚙️ Install PHP and Composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: mbstring, pdo, pdo_mysql, intl
           coverage: none
+        working-directory: collectionlink
 
       - name: ✅ Validate composer.json and composer.lock
         run: composer validate
+        working-directory: collectionlink
 
       - name: Cache Composer packages
         id: composer-cache
@@ -36,18 +34,23 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+        working-directory: collectionlink
 
       - name: 📦 Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        working-directory: collectionlink
 
       - name: Generate SSL Key for JWT
         run: php bin/console lexik:jwt:generate-keypair
+        working-directory: collectionlink
 
       - name: Migrate database 
         run: php bin/console d:m:m --no-interaction --env=test
+        working-directory: collectionlink
 
       - name: ✅ PHPUnit tests
         run: php bin/phpunit --coverage-text
+        working-directory: collectionlink
 
   deploy:
     name: 🚀 Déploiement Symfony
