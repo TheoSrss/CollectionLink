@@ -34,12 +34,12 @@ final readonly class UserPersister implements ProcessorInterface
             $data->setPassword($hashedPassword);
             $data->eraseCredentials();
         }
-        if (
-            !in_array('byAdmin', $uriVariables) ||
-            !$uriVariables['byAdmin']
-        ) {
-            $data->setRoles([]);
-        }
+        // if (
+        //     !in_array('byAdmin', $uriVariables) ||
+        //     !$uriVariables['byAdmin']
+        // ) {
+        //     $data->setRoles([]);
+        // }
 
         if (!in_array(User::ROLE_USER, $data->getRoles())) {
             $verificationCode = $this->codeService->generateNewCode();
@@ -49,7 +49,6 @@ final readonly class UserPersister implements ProcessorInterface
         if (!key_exists('previous_data', $context)) {
             $context['previous_data'] = $data;
         }
-        // dd($context);
         return $this->processor->process($data, $operation, $uriVariables, $context);
     }
 }
