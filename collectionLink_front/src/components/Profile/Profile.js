@@ -4,7 +4,7 @@ import TextInput from "../forms/TextInput";
 import useForm from "../../hooks/useForm";
 import api from "../../services/api";
 import Loading from "../Loading";
-import {Mail, User} from "lucide-react";
+import {AlignJustify, Mail, User} from "lucide-react";
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -16,31 +16,34 @@ const Profile = () => {
     //     return errors;
     // };
 
-    const initialValues = {email: '', username: ''};
-    const {values, errors, handleChange, handleSubmit, updateValues, handleApiErrors} = useForm(initialValues);
+    const {values, errors, handleChange, handleSubmit, updateValues, handleApiErrors} = useForm({});
 
     useEffect(() => {
-        async function fetchUserData() {
-            try {
-                const response = await api.get('profile');
-                const data = await response.json();
-                setUser(data);
-                updateValues(data);
-                setLoading(false);
-            } catch (error) {
-                setLoading(false);
-            }
+        if(!user){
+            fetchUserData();
         }
-
-        fetchUserData();
     }, [updateValues]);
+
+    const fetchUserData = async () => {
+        try {
+            const response = await api.get('profile');
+            const data = await response.json();
+            setUser(data);
+            updateValues(data);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+        }
+    }
 
     const onSubmit = async (formData) => {
         setFormError(false);
         try {
             const res = await api.patch(`users/${user.id}`, {
                 json: {
-                    "email": formData.email, "username": formData.username
+                    "email": formData.email,
+                    "username": formData.username,
+                    "bio": formData.bio
                 }
             });
             handleApiErrors([]);
@@ -82,6 +85,15 @@ const Profile = () => {
                     onChange={handleChange}
                     error={errors.username}
                     logo={<User/>}
+                />
+                <TextInput
+                    name="bio"
+                    label="Biographie"
+                    value={values.bio}
+                    onChange={handleChange}
+                    error={errors.bio}
+                    textarea={true}
+                    logo={<AlignJustify/>}
                 />
                 <button type="submit"
                         className="w-full text-[#FFFFFF] bg-[#4F46E5] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-6">

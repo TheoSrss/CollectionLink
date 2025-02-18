@@ -58,6 +58,7 @@ const Public = () => {
                 </div>
             </div>
             <h1 className="text-xl font-bold mt-4">@{collection.user.username}</h1>
+            <h1 className="text-l font-bold m-4">{collection.user.bio}</h1>
             <p className="text-gray-800 dark:text-gray-300 text-xl">{collection.name}</p>
             <p className="text-gray-500 dark:text-gray-400 text-sm">{collection.description}</p>
         </div>

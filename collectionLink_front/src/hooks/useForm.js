@@ -12,10 +12,10 @@ const useForm = (initialState) => {
     const handleChange = (e) => {
         if (!e.target) {
             // @TODO ajouter cette logique pour  les collectables dans le form collections
-            setValues({...values, [e.name]: e.value});
+            setValues(prev => ({ ...prev, [e.name]: e.value }));
         } else {
-            const {name, value, type, checked} = e.target;
-            setValues({...values, [name]: type === "checkbox" ? checked : value});
+            const { name, value, type, checked } = e.target;
+            setValues(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
         }
     };
 
