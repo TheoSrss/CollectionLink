@@ -30,17 +30,45 @@ const Collections = () => {
     const [passwordExist, setPasswordExist] = useState(false);
 
     const {handleChange, handleSubmit, values, updateValues, handleApiErrors, errors} = useForm(defaultCollection);
-    // Modal logic
+
+
+    // Datatable
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortOrder, setSortOrder] = useState("asc");
+    const [totalItems, setTotalItems] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handleSort = (column) => {
+        if (sortColumn === column) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortColumn(column);
+            setSortOrder("asc");
+        }
+    };
+    const handleCurrentPage = (newPage) => {
+        if (newPage >= 1 && newPage <=  Math.ceil(totalItems / 5)) {
+            setCurrentPage(newPage);
+        }
+    };
+    // Datatable
+
     useEffect(() => {
+        fetchCollectionsData();
         if (user) {
-            fetchCollectionsData();
             fetchItemsData();
         }
-    }, [user]);
+    }, [user,,currentPage,sortOrder]);
+
 
     const fetchCollectionsData = async () => {
         try {
-            const response = await api.get(`collections?user=${user.id}`);
+            const queryParams = new URLSearchParams({
+                user: user.id,
+                page: currentPage,
+                'order[name]': sortOrder
+            }).toString();
+            const response = await api.get(`collections?${queryParams}`);
             const data = await response.json();
             setCollections(data["member"]);
             setLoading(false);
@@ -225,7 +253,19 @@ const Collections = () => {
             <div className="flex flex-row gap-3 pb-4">
                 <h1 className="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">Mes collections</h1>
             </div>
-            <Table columns={['Titre', 'Date de création', "Nombre d'items", 'Actions']}>
+            <Table
+                   columns={[{key: "name", label: "Titre", sortable: true}, {
+                       key: "createdAt", label: "Date de création", sortable: true
+                   }, {key: "numberItems", label: "Nombre d'items"}, {
+                       key: "actions", label: "Actions",
+                   },]}
+                   handleSort={handleSort}
+                   sortColumn={sortColumn}
+                   sortOrder={sortOrder}
+                   totalItem={totalItems}
+                   currentPage={currentPage}
+                   handleCurrentPage={handleCurrentPage}
+            >
                 {collections.map(collection => (<tr key={collection['@id']}>
                     <td>{collection.name}</td>
                     <td>{formatDateTime(collection.createdAt)}</td>

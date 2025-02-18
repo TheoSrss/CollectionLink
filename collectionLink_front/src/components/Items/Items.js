@@ -28,15 +28,42 @@ const Items = () => {
         handleChange, handleSubmit, values, updateValues, handleApiErrors, errors, defaultValues
     } = useForm(defaultItem);
 
+    // Datatable
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortOrder, setSortOrder] = useState("asc");
+    const [totalItems, setTotalItems] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handleSort = (column) => {
+        if (sortColumn === column) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortColumn(column);
+            setSortOrder("asc");
+        }
+    };
+    const handleCurrentPage = (newPage) => {
+        if (newPage >= 1 && newPage <=  Math.ceil(totalItems / 5)) {
+            setCurrentPage(newPage);
+        }
+    };
+    // Datatable
+
     useEffect(() => {
         fetchItemsData();
-    }, [user]);
+    }, [user,currentPage,sortOrder]);
 
     const fetchItemsData = async () => {
         try {
-            const response = await api.get(`collectables?creator=${user.id}`);
+            const queryParams = new URLSearchParams({
+                creator: user.id,
+                page: currentPage,
+                'order[name]': sortOrder
+            }).toString();
+            const response = await api.get(`collectables?${queryParams}`);
             const data = await response.json();
             setItems(data["member"]);
+            setTotalItems(data.totalItems);
         } catch (error) {
             setLoading(true);
         } finally {
@@ -130,6 +157,7 @@ const Items = () => {
     if (loading) {
         return <Loading></Loading>;
     }
+
     return (<div className="h-screen flex items-center justify-center">
         {formOpened && (<Modal setModalOpen={setFormOpened}>
             <FormWrapper onSubmit={handleSubmit(onSubmit)} error={formError}>
@@ -197,7 +225,19 @@ const Items = () => {
             <div className="flex flex-row gap-3 pb-4">
                 <h1 className="text-3xl font-bold text-[#4B5563] text-[#4B5563] my-auto">Mes items</h1>
             </div>
-            <Table columns={['Item', 'Date de création', 'Description', 'Actions']}>
+            <Table
+                columns={[{key: "name", label: "Item", sortable: true}, {
+                    key: "createdAt", label: "Date de création", sortable: true
+                }, {key: "description", label: "Description"}, {
+                    key: "actions", label: "Actions",
+                },]}
+                handleSort={handleSort}
+                sortColumn={sortColumn}
+                sortOrder={sortOrder}
+                totalItem={totalItems}
+                currentPage={currentPage}
+                handleCurrentPage={handleCurrentPage}
+            >
                 {items.map(item => (<tr key={item['@id']}>
                     <td>{item.name}</td>
                     <td>{formatDateTime(item.createdAt)}</td>
