@@ -13,6 +13,18 @@ jobs:
       run:
         working-directory: collectionLink_api  
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: collectionlink_test
+          MYSQL_USER: collectionlink
+          MYSQL_PASSWORD: 1!Testmotdepasse
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -23,6 +35,16 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, pdo, pdo_mysql, intl
           coverage: none
+      
+      - name: 📄 Create .env file
+        run: |
+          touch .env
+          echo "APP_ENV=test" >> .env
+          echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
+          echo "DATABASE_URL=mysql://collectionlink:1!Testmotdepasse@127.0.0.1:3306/collectionlink_test?serverVersion=8.0" >> .env
+          echo "JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem" >> .env
+          echo "JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem" >> .env
+          echo "JWT_PASSPHRASE=${{ secrets.JWT_PASSPHRASE }}" >> .env
 
       - name: ✅ Validate composer.json and composer.lock
         run: composer validate
@@ -36,21 +58,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
-      - name: 📄 Create .env file
-        run: |
-          touch .env
-          echo "APP_ENV=test" >> .env
-          echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem" >> .env
-          echo "JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem" >> .env
-          echo "JWT_PASSPHRASE=${{ secrets.JWT_PASSPHRASE }}" >> .env
-          
       - name: 📦 Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: Create JWT directory
+        run: mkdir -p config/jwt
+
       - name: Generate SSL Key for JWT
         run: php bin/console lexik:jwt:generate-keypair
+
+      - name: 🛠️ Create database schema
+        run: php bin/console doctrine:schema:create --env=test
 
       - name: Migrate database 
         run: php bin/console d:m:m --no-interaction --env=test
