@@ -9,11 +9,14 @@ jobs:
   symfony:
     name: 🧪 Collectionlink
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: collectionlink  # ✅ Appliqué à tous les `run:`
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
-      
+        uses: actions/checkout@v4  # ❌ Pas de `working-directory` ici
+
       - name: ⚙️ Install PHP and Composer
         uses: shivammathur/setup-php@v2
         with:
@@ -22,34 +25,28 @@ jobs:
           coverage: none
 
       - name: ✅ Validate composer.json and composer.lock
-        run: composer validate
-        working-directory: collectionlink
+        run: composer validate  # ✅ `working-directory` appliqué via `defaults:`
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v3  # ❌ Pas de `working-directory` ici
         with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          path: collectionlink/vendor  # ✅ On indique directement le bon chemin
+          key: ${{ runner.os }}-php-${{ hashFiles('collectionlink/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
-        working-directory: collectionlink
 
       - name: 📦 Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-        working-directory: collectionlink
 
       - name: Generate SSL Key for JWT
         run: php bin/console lexik:jwt:generate-keypair
-        working-directory: collectionlink
 
       - name: Migrate database 
         run: php bin/console d:m:m --no-interaction --env=test
-        working-directory: collectionlink
 
       - name: ✅ PHPUnit tests
         run: php bin/phpunit --coverage-text
-        working-directory: collectionlink
 
   deploy:
     name: 🚀 Déploiement Symfony
@@ -59,7 +56,7 @@ jobs:
 
     steps:
       - name: 📥 Récupérer le code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # ❌ Pas de `working-directory` ici
 
       - name: 🔑 Se connecter au serveur et déployer
         uses: appleboy/ssh-action@v0.1.7
@@ -76,5 +73,3 @@ jobs:
             php bin/console cache:clear
             chmod -R 777 var/
             sudo systemctl restart apache2
-          
-
