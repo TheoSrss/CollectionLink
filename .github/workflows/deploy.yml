@@ -9,10 +9,14 @@ jobs:
   symfony:
     name: 🧪 Collectionlink
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./collectionlink
 
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
+        working-directory: collectionlink_api
 
       - name: ⚙️ Install PHP and Composer
         uses: shivammathur/setup-php@v2
