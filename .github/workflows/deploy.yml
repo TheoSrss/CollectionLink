@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: collectionLink_api  # ✅ Dossier correct sur GitHub
+        working-directory: collectionLink_api  
 
     steps:
       - name: 📥 Checkout code
@@ -31,10 +31,15 @@ jobs:
         id: composer-cache
         uses: actions/cache@v3
         with:
-          path: collectionLink_api/vendor  # ✅ Chemin correct pour GitHub
+          path: collectionLink_api/vendor 
           key: ${{ runner.os }}-php-${{ hashFiles('collectionLink_api/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
+      - name: 🛠️ File .env.test
+        run: |
+          echo "APP_ENV=test" >> .env.test
+          echo "DATABASE_URL=mysql://root:root@127.0.0.1:3306/test_db" >> .env.test
 
       - name: 📦 Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
