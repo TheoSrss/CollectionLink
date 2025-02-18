@@ -46,7 +46,10 @@ final readonly class UserPersister implements ProcessorInterface
             $data->setVerificationCode($verificationCode);
             $this->mailer->sendValidationCode($data, $verificationCode);
         }
-
+        if (!key_exists('previous_data', $context)) {
+            $context['previous_data'] = $data;
+        }
+        // dd($context);
         return $this->processor->process($data, $operation, $uriVariables, $context);
     }
 }

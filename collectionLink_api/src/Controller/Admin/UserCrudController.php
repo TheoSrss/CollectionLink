@@ -15,9 +15,7 @@ class UserCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly EntityProcessorService $customPersistService,
-        )
-    {
-    }
+    ) {}
 
     public static function getEntityFqcn(): string
     {
@@ -31,6 +29,7 @@ class UserCrudController extends AbstractCrudController
             FormField::addTab('User Info'),
             TextField::new('email'),
             TextField::new('username'),
+            TextField::new('bio'),
             TextField::new('plainPassword')
                 ->onlyOnForms()
                 ->setRequired($pageName === Crud::PAGE_NEW),

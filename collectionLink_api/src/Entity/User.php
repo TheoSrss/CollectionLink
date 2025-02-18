@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Trait\TimestampableTrait;
 use App\State\PasswordForgottenNewPasswordProcessor;
 use App\State\PasswordForgottenRequestProcessor;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -133,6 +134,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $passwordForgottenCode = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['user:read', 'user:write', 'collection:read'])]
+    private ?string $bio = null;
 
     public function __construct()
     {
@@ -303,6 +308,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPasswordForgottenCode(?int $code): self
     {
         $this->passwordForgottenCode = $code;
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
 
         return $this;
     }
