@@ -20,7 +20,6 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, pdo, pdo_mysql, intl
           coverage: none
-        working-directory: collectionlink
 
       - name: ✅ Validate composer.json and composer.lock
         run: composer validate
@@ -77,4 +76,5 @@ jobs:
             php bin/console cache:clear
             chmod -R 777 var/
             sudo systemctl restart apache2
+          
 
