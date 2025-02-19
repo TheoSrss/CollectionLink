@@ -15,8 +15,7 @@ class MailerService
     ) {}
 
     private static array $fromEmails = [
-        'default' => 'hi@demomailtrap.com',
-        'noreply' => 'noreply@collectionlink.com',
+        'default' => 'collectionlink@theosourisseau.com'
     ];
 
     private function sendEmail(string $to, string $subject, $templatePath, $templateParams, string $from = 'default'): void
@@ -27,7 +26,6 @@ class MailerService
 
         $mjmlContent = $this->twig->render('email/' . $templatePath, $templateParams);
         $htmlContent = $this->twig->createTemplate('{{ mjmlContent|mjml }}')->render(['mjmlContent' => $mjmlContent]);
-
 
         $email = (new Email())
             ->from(self::$fromEmails[$from])

@@ -1436,16 +1436,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.24.3",
+            "version": "v4.24.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "3eeb8f1dc94c991423a386f3fc334f6caadc8054"
+                "reference": "fd1b0e555655a5d8df67a0a48a28e07a1dd0d6f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/3eeb8f1dc94c991423a386f3fc334f6caadc8054",
-                "reference": "3eeb8f1dc94c991423a386f3fc334f6caadc8054",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/fd1b0e555655a5d8df67a0a48a28e07a1dd0d6f8",
+                "reference": "fd1b0e555655a5d8df67a0a48a28e07a1dd0d6f8",
                 "shasum": ""
             },
             "require": {
@@ -1470,13 +1470,14 @@
                 "symfony/security-bundle": "^5.4|^6.0|^7.0",
                 "symfony/string": "^5.4|^6.0|^7.0",
                 "symfony/translation": "^5.4|^6.0|^7.0",
+                "symfony/twig-bridge": "^5.4.48|^6.4.16|^7.1.9",
                 "symfony/twig-bundle": "^5.4|^6.0|^7.0",
                 "symfony/uid": "^5.4|^6.0|^7.0",
                 "symfony/ux-twig-component": "^2.21",
                 "symfony/validator": "^5.4|^6.0|^7.0",
                 "twig/extra-bundle": "^3.17",
                 "twig/html-extra": "^3.17",
-                "twig/twig": "^3.15"
+                "twig/twig": "^3.20"
             },
             "require-dev": {
                 "doctrine/doctrine-fixtures-bundle": "^3.4|3.5.x-dev",
@@ -1525,7 +1526,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.24.3"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.24.4"
             },
             "funding": [
                 {
@@ -1533,7 +1534,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-12T19:14:43+00:00"
+            "time": "2025-02-19T19:52:22+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -9086,16 +9087,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.0.2",
+            "version": "12.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "69dde560510151f7d04315fac6c72016cc5d7bc8"
+                "reference": "2e3038bff41d56114e5396151060f5ac9d2d6751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/69dde560510151f7d04315fac6c72016cc5d7bc8",
-                "reference": "69dde560510151f7d04315fac6c72016cc5d7bc8",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2e3038bff41d56114e5396151060f5ac9d2d6751",
+                "reference": "2e3038bff41d56114e5396151060f5ac9d2d6751",
                 "shasum": ""
             },
             "require": {
@@ -9151,7 +9152,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.0.2"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.0.3"
             },
             "funding": [
                 {
@@ -9159,7 +9160,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-08T09:08:00+00:00"
+            "time": "2025-02-18T14:04:13+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -9408,16 +9409,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.0.2",
+            "version": "12.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6301fe5c1f5f34192ffd650a87fe055677a32212"
+                "reference": "df170d66e1dbb8ff0f21c9be2e7d7726bebc57ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6301fe5c1f5f34192ffd650a87fe055677a32212",
-                "reference": "6301fe5c1f5f34192ffd650a87fe055677a32212",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/df170d66e1dbb8ff0f21c9be2e7d7726bebc57ed",
+                "reference": "df170d66e1dbb8ff0f21c9be2e7d7726bebc57ed",
                 "shasum": ""
             },
             "require": {
@@ -9485,7 +9486,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.0.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.0.3"
             },
             "funding": [
                 {
@@ -9501,7 +9502,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-08T09:18:47+00:00"
+            "time": "2025-02-18T06:28:55+00:00"
         },
         {
             "name": "sebastian/cli-parser",
