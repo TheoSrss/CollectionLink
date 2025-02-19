@@ -16,6 +16,9 @@ api_platform:
     extra_properties:
       standard_put: true
       rfc_7807_compliant_errors: true
+    pagination_items_per_page: 5
+    pagination_client_enabled: true
+    pagination_client_items_per_page: true
   inflector: api_platform.metadata.inflector
   use_symfony_listeners: true
   swagger:

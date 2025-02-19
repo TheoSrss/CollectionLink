@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
@@ -60,7 +61,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
         ),
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact', 'name' => 'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['name' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
 #[ORM\HasLifecycleCallbacks]
 class CollectionObject
 {
