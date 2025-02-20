@@ -69,7 +69,6 @@ class Collectable
 
     #[ORM\ManyToOne(inversedBy: 'collectablesCreated')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull()]
     #[Groups(['collectable:read'])]
     private ?User $creator = null;
 

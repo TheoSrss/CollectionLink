@@ -18,7 +18,6 @@ final readonly class CollectablePersister implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        dd(!in_array('byAdmin', $uriVariables), $uriVariables);
         if (
             !in_array('byAdmin', $uriVariables) ||
             !$uriVariables['byAdmin']

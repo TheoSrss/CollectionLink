@@ -24,7 +24,6 @@ final readonly class CollectionPersister implements ProcessorInterface
             !$uriVariables['byAdmin']
         ) {
             if ($data instanceof CollectionObject) {
-
                 $user = $this->security->getUser();
                 if ($user instanceof User) {
                     $data->setUser($user);
