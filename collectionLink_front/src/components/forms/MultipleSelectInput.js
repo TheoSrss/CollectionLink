@@ -28,7 +28,7 @@ const MultipleSelectInput = ({label, name, options, itemTitle, selectedValues, o
                 {selectedValues.length > 0 ? selectedValues.map(item => item[itemTitle]).join(', ') : 'Sélectionnez...'}
             </button>
             {isOpen && (<div
-                className="absolute  w-full bg-white border mt-2 rounded-lg shadow-lg max-h-60 overflow-y-auto dark:bg-gray-800">
+                className="absolute  w-full bg-white border mt-2 rounded-lg shadow-lg max-h-60 overflow-y-auto dark:bg-gray-800 z-10">
                 {options.map((option) => (<div
                     key={option['@id']}
                     onClick={() => handleSelect(option)}
