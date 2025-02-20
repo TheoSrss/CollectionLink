@@ -49,6 +49,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
+    'creator' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['name' => 'ASC'], arguments: ['orderParameterName' => 'order'])]
 #[ORM\HasLifecycleCallbacks]
