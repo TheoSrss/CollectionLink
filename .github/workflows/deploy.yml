@@ -89,10 +89,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          # password: ${{ secrets.SERVER_PASSWORD }}
           debug: true 
           script: |
-            cd /var/www/collectionlink  
+            cd /var/www/collectionlink/collectionLink_api
             git fetch --all
             git reset --hard origin/main
             composer install --no-interaction --prefer-dist --optimize-autoloader
