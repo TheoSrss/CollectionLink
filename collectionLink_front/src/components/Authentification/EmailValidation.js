@@ -5,12 +5,14 @@ import TextInput from "../forms/TextInput";
 import {TicketCheck} from "lucide-react";
 import api from "../../services/api";
 import {useAuth} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const EmailValidation = ({email}) => {
     const initialState = {code: ''};
     const [formError, setFormError] = useState(false);
     const {values, errors, handleChange, handleSubmit, handleApiErrors} = useForm(initialState);
     const {updateUser} = useAuth();
+    const navigate = useNavigate();
 
     const onSubmit = async (formData) => {
         try {
@@ -23,6 +25,7 @@ const EmailValidation = ({email}) => {
             handleApiErrors([]);
             if (res.status === 200) {
                 updateUser();
+                navigate('/dashboard');
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
