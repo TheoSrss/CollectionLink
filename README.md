@@ -3,7 +3,7 @@
   <a href="https://collection-link.vercel.app/login">
     <img src="collectionLink_front/src/assets/svg/logo.png" alt="CollectionLink Logo" width="200"/>
   </a>
-  <h1>Pomodoro</h1>
+  <h1>CollectionLink</h1>
 
 ## </div>
 
